@@ -518,20 +518,41 @@ function filterBuildings() {
 }
 
 
+function attachUiHandlers() {
+    const showAllBtn = document.getElementById('showAllBtn');
+    if (showAllBtn) {
+        showAllBtn.addEventListener('click', showAllBuildings);
+    }
+
+    const clearRouteBtn = document.getElementById('clearRouteBtn');
+    if (clearRouteBtn) {
+        clearRouteBtn.addEventListener('click', clearRoute);
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', filterBuildings);
+    }
+
+    const selectAllVisibleBtn = document.getElementById('selectAllVisibleBtn');
+    if (selectAllVisibleBtn) {
+        selectAllVisibleBtn.addEventListener('click', selectAllVisible);
+    }
+
+    const deselectAllBtn = document.getElementById('deselectAllBtn');
+    if (deselectAllBtn) {
+        deselectAllBtn.addEventListener('click', deselectAll);
+    }
+
+    const calculateSelectedBtn = document.getElementById('calculateSelectedBtn');
+    if (calculateSelectedBtn) {
+        calculateSelectedBtn.addEventListener('click', calculateSelectedRoute);
+    }
+}
+
+
 if (typeof google === 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
-        document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
-        document.getElementById('searchInput').addEventListener('input', filterBuildings);
-        document.getElementById('selectAllVisibleBtn').addEventListener('click', selectAllVisible);
-        document.getElementById('deselectAllBtn').addEventListener('click', deselectAll);
-        document.getElementById('calculateSelectedBtn').addEventListener('click', calculateSelectedRoute);
-    });
+    document.addEventListener('DOMContentLoaded', attachUiHandlers);
 } else {
-    document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
-    document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
-    document.getElementById('searchInput').addEventListener('input', filterBuildings);
-    document.getElementById('selectAllVisibleBtn').addEventListener('click', selectAllVisible);
-    document.getElementById('deselectAllBtn').addEventListener('click', deselectAll);
-    document.getElementById('calculateSelectedBtn').addEventListener('click', calculateSelectedRoute);
+    attachUiHandlers();
 }
