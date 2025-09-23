@@ -153,6 +153,7 @@ function normalizeAddress(address) {
     
     // Traitement normal pour les autres adresses
     let cleanAddress = address
+        .replace(/(\d+)\s*-\s*(\d+)/g, '$1')
         .replace(/\//g, ' ')
         .replace(/-/g, ' ')
         .replace(/\s+/g, ' ')
@@ -396,8 +397,9 @@ function selectAllVisible() {
             selectedBuildings.add(address);
             
             // Update marker color
-            const index = BUILDINGS.indexOf(address);
-            if (markers[index]) {
+            const item = checkbox.closest('.building-item');
+            const index = item ? parseInt(item.dataset.index, 10) : -1;
+            if (!Number.isNaN(index) && markers[index]) {
                 markers[index].setIcon({
                     url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
                 });
@@ -502,7 +504,7 @@ function filterBuildings() {
     items.forEach(item => {
         const address = item.dataset.address.toLowerCase();
         if (address.includes(searchTerm)) {
-            item.style.display = 'block';
+            item.style.display = 'flex';
             visibleCounter++;
         } else {
             item.style.display = 'none';
