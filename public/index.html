@@ -15,14 +15,11 @@
             <div class="controls">
                 <button id="showAllBtn">Afficher tous les immeubles</button>
                 <button id="clearRouteBtn">Effacer le trajet</button>
-                <button id="toggleSectorsBtn">Masquer les secteurs</button>
             </div>
-            <div class="route-controls">
-                <label>Sélectionner un secteur:</label>
-                <select id="sectorSelect">
-                    <option value="">-- Sélectionnez un secteur --</option>
-                </select>
-                <button id="calculateSectorRouteBtn">Calculer le trajet du secteur</button>
+            <div class="selection-controls">
+                <button id="selectAllVisibleBtn">Sélectionner les visibles</button>
+                <button id="deselectAllBtn">Tout désélectionner</button>
+                <button id="calculateSelectedBtn" disabled>Calculer le trajet (<span id="selectedCount">0</span>)</button>
             </div>
         </header>
         
@@ -30,7 +27,10 @@
             <div id="map"></div>
             
             <aside class="sidebar">
-                <h2>Liste des immeubles (<span id="buildingCount">0</span>)</h2>
+                <h2>Liste des immeubles</h2>
+                <div class="building-counter">
+                    <span id="visibleCount">0 immeubles visibles</span> / <span id="buildingCount">0</span> total
+                </div>
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="Rechercher une adresse...">
                 </div>

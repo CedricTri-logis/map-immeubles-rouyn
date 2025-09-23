@@ -1,195 +1,96 @@
-const SECTORS = [
-    {
-        name: "Centre-ville",
-        color: "#FF6B6B",
-        buildings: [
-            "31-37 Principale",
-            "73-77 Principale",
-            "79-87 Principale",
-            "151-159 Principale",
-            "187-193 Principale",
-            "234-238 Principale",
-            "296-300 Principale",
-            "89 Notre-Dame",
-            "96 Horne",
-            "5-9 Gatineau",
-            "136 Champlain",
-            "26 Taschereau E",
-            "44 Taschereau O",
-            "29 Perreault E",
-            "45 Perreault E",
-            "43-45 Perreault O"
-        ],
-        bounds: [
-            { lat: 48.2450, lng: -79.0250 },
-            { lat: 48.2450, lng: -79.0100 },
-            { lat: 48.2350, lng: -79.0100 },
-            { lat: 48.2350, lng: -79.0250 }
-        ]
-    },
-    {
-        name: "Noranda",
-        color: "#4ECDC4",
-        buildings: [
-            "74-78 Mgr-Tessier O",
-            "107 Mgr-Tessier O",
-            "109-113 Mgr-Tessier O",
-            "110-114 Mgr-Tessier O",
-            "117-119 Mgr-Tessier O",
-            "123-125 Mgr-Tessier O",
-            "49-53 Taschereau E",
-            "73-77 Taschereau E",
-            "89 Taschereau E",
-            "108-114 Taschereau E",
-            "14-20 Perreault E",
-            "58-60 Perreault E",
-            "62-66 Perreault E"
-        ],
-        bounds: [
-            { lat: 48.2550, lng: -79.0200 },
-            { lat: 48.2550, lng: -79.0050 },
-            { lat: 48.2450, lng: -79.0050 },
-            { lat: 48.2450, lng: -79.0200 }
-        ]
-    },
-    {
-        name: "Rouyn-Sud",
-        color: "#95E1D3",
-        buildings: [
-            "91 Mgr-Rheaume E",
-            "307 Mgr-Rheaume E",
-            "24 Mgr-Latulipe E",
-            "270 Mgr-Latulipe E",
-            "122 Cardinal-Begin E",
-            "254-258 Cardinal-Begin E",
-            "260-264 Cardinal-Begin E",
-            "308 Cardinal-Begin E",
-            "103-105 Dallaire",
-            "110 Dallaire",
-            "284-288 Dallaire",
-            "276-282 Gagne",
-            "378-382 Gagne"
-        ],
-        bounds: [
-            { lat: 48.2350, lng: -79.0200 },
-            { lat: 48.2350, lng: -79.0050 },
-            { lat: 48.2250, lng: -79.0050 },
-            { lat: 48.2250, lng: -79.0200 }
-        ]
-    },
-    {
-        name: "Granada",
-        color: "#F38181",
-        buildings: [
-            "2349-2357 Granada",
-            "375-377 Taschereau E",
-            "567 Taschereau E",
-            "633 Taschereau E",
-            "1384-1392 Perreault E",
-            "35-41 Pinder E",
-            "83-87 Pinder E",
-            "42-48 Pinder O"
-        ],
-        bounds: [
-            { lat: 48.2450, lng: -79.0050 },
-            { lat: 48.2450, lng: -78.9900 },
-            { lat: 48.2350, lng: -78.9900 },
-            { lat: 48.2350, lng: -79.0050 }
-        ]
-    },
-    {
-        name: "Noranda-Ouest",
-        color: "#AA96DA",
-        buildings: [
-            "44-48 Montreal O",
-            "68-72 Montreal O",
-            "355 Montreal O",
-            "73-77 Iberville O",
-            "80 Des Oblats O",
-            "22-28 Gamble O",
-            "306 Taschereau O"
-        ],
-        bounds: [
-            { lat: 48.2550, lng: -79.0350 },
-            { lat: 48.2550, lng: -79.0200 },
-            { lat: 48.2450, lng: -79.0200 },
-            { lat: 48.2450, lng: -79.0350 }
-        ]
-    },
-    {
-        name: "de l'Université",
-        color: "#FCBAD3",
-        buildings: [
-            "469-473 Richard",
-            "490 Richard",
-            "529-531 Richard",
-            "587 Lariviere",
-            "784 Lariviere",
-            "992 Lariviere",
-            "718 Laliberte",
-            "539 Girard",
-            "480 Universite",
-            "500 Boutour"
-        ],
-        bounds: [
-            { lat: 48.2650, lng: -79.0200 },
-            { lat: 48.2650, lng: -79.0050 },
-            { lat: 48.2550, lng: -79.0050 },
-            { lat: 48.2550, lng: -79.0200 }
-        ]
-    },
-    {
-        name: "Noranda-Nord/Lac-Dufault",
-        color: "#FFFFD2",
-        buildings: [
-            "52 Carter",
-            "104-106 Carter",
-            "173-177 Carter",
-            "17 8e Rue",
-            "109 8e Rue",
-            "215 8e Rue",
-            "156 6e Rue",
-            "7-15 15e Rue",
-            "525-531 Ste-Bernadette",
-            "628-636 Ste-Bernadette",
-            "1109-1115 Charbonneau",
-            "1141 du Jardin",
-            "806 Emile-Dussault"
-        ],
-        bounds: [
-            { lat: 48.2750, lng: -79.0300 },
-            { lat: 48.2750, lng: -79.0100 },
-            { lat: 48.2650, lng: -79.0100 },
-            { lat: 48.2650, lng: -79.0300 }
-        ]
-    },
-    {
-        name: "Bellecombe",
-        color: "#B8E6B8",
-        buildings: [
-            "154 Charlebois",
-            "184-190 Tremoy",
-            "194-198 Chenier",
-            "2-6 Sam-Laporte",
-            "26 Bertrand",
-            "30 Gelineau",
-            "32 Gelineau",
-            "40 Matapedia",
-            "50-54 Mercier",
-            "4114 Riverains",
-            "4996 Hull",
-            "7313 Saguenay"
-        ],
-        bounds: [
-            { lat: 48.2250, lng: -79.0300 },
-            { lat: 48.2250, lng: -79.0100 },
-            { lat: 48.2150, lng: -79.0100 },
-            { lat: 48.2150, lng: -79.0300 }
-        ]
-    }
+const BUILDINGS = [
+    "104-106 Carter",
+    "156 6e Rue",
+    "107 Mgr-Tessier O",
+    "108-114 Taschereau E",
+    "109-113 Mgr-Tessier O",
+    "110-114 Mgr-Tessier O",
+    "1109-1115 Charbonneau",
+    "1141 du Jardin",
+    "117-119 Mgr-Tessier O",
+    "123-125 Mgr-Tessier O",
+    "1384-1392 Perreault E",
+    "14-20 Perreault E",
+    "151-159 Principale",
+    "154 Charlebois",
+    "17 8e Rue",
+    "173-177 Carter",
+    "184-190 Tremoy",
+    "187-193 Principale",
+    "194-198 Chenier",
+    "567 Taschereau E",
+    "2-6 Sam-Laporte",
+    "22-28 Gamble O",
+    "234-238 Principale",
+    "2349-2357 Granada",
+    "24 Mgr-Latulipe E",
+    "254-258 Cardinal-Begin E",
+    "26 Bertrand",
+    "26 Taschereau E",
+    "260-264 Cardinal-Begin E",
+    "270 Mgr-Latulipe E",
+    "276-282 Gagne",
+    "284-288 Dallaire",
+    "29 Perreault E",
+    "296-300 Principale",
+    "30 Gelineau",
+    "31-37 Principale",
+    "32 Gelineau",
+    "35-41 Pinder E",
+    "375-377 Taschereau E",
+    "378-382 Gagne",
+    "40 Matapedia",
+    "42-48 Pinder O",
+    "43-45 Perreault O",
+    "44 Taschereau O",
+    "44-48 Montreal O",
+    "45 Perreault E",
+    "469-473 Richard",
+    "480 Universite",
+    "49-53 Taschereau E",
+    "4996 Hull",
+    "50-54 Mercier",
+    "500 Boutour",
+    "525-531 Ste-Bernadette",
+    "529-531 Richard",
+    "539 Girard",
+    "58-60 Perreault E",
+    "587 Lariviere",
+    "62-66 Perreault E",
+    "628-636 Ste-Bernadette",
+    "633 Taschereau E",
+    "68-72 Montreal O",
+    "7-15 15e Rue",
+    "73-77 Iberville O",
+    "73-77 Taschereau E",
+    "7313 Saguenay",
+    "74-78 Mgr-Tessier O",
+    "784 Lariviere",
+    "80 Des Oblats O",
+    "806 Emile-Dussault",
+    "83-87 Pinder E",
+    "89 Notre-Dame",
+    "91 Mgr-Rheaume E",
+    "96 Horne",
+    "992 Lariviere",
+    "103-105 Dallaire",
+    "718 Laliberte",
+    "490 Richard",
+    "307 Mgr-Rheaume E",
+    "308 Cardinal-Begin E",
+    "122 Cardinal-Begin E",
+    "89 Taschereau E",
+    "355 Montreal O",
+    "79-87 Principale",
+    "73-77 Principale",
+    "109 8e Rue",
+    "215 8e Rue",
+    "52 Carter",
+    "136 Champlain",
+    "5-9 Gatineau",
+    "110 Dallaire",
+    "306 Taschereau O"
 ];
-
-const BUILDINGS = SECTORS.flatMap(sector => sector.buildings);
 
 let map;
 let markers = [];
@@ -199,8 +100,8 @@ let geocoder;
 let buildingsData = [];
 let infoWindow;
 let apiKey = '';
-let currentSector = null;
-let sectorPolygons = [];
+let selectedBuildings = new Set();
+let visibleMarkers = [];
 
 function initializeMap() {
     const centerLatLng = { lat: 48.2396, lng: -79.0132 };
@@ -231,11 +132,18 @@ function initializeMap() {
     
     infoWindow = new google.maps.InfoWindow();
     
-    // Populate sectors dropdown before loading buildings
-    populateSectorSelect();
+    // Add map listeners for bounds changes (but not on initial load)
+    let isInitialLoad = true;
+    map.addListener('bounds_changed', debounce(() => {
+        if (!isInitialLoad) {
+            updateVisibleBuildings();
+        }
+    }, 300));
     
-    // Draw sector polygons on map
-    drawSectorPolygons();
+    // After initial load, allow filtering
+    setTimeout(() => {
+        isInitialLoad = false;
+    }, 2000);
     
     loadBuildings();
 }
@@ -251,7 +159,7 @@ function normalizeAddress(address) {
         "296-300 Principale": "296 Avenue Principale, Rouyn-Noranda, QC J9X 4P7, Canada",
         "31-37 Principale": "31 Avenue Principale, Rouyn-Noranda, QC J9X 4P1, Canada",
         "4996 Hull": "4996 Rang Hull, Rouyn-Noranda, QC, Canada",
-        "7313 Saguenay": "7313 Rang Saguenay, Rouyn-Noranda, QC, Canada"
+        "7313 Saguenay": "7313 rue saguenay, Rouyn-Noranda, QC, Canada"
     };
     
     // Vérifier si c'est un cas spécial
@@ -302,16 +210,43 @@ async function geocodeAddress(address) {
     });
 }
 
-function populateSectorSelect() {
-    const sectorSelect = document.getElementById('sectorSelect');
-    sectorSelect.innerHTML = '<option value="">-- Sélectionnez un secteur --</option>';
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function updateVisibleBuildings() {
+    const bounds = map.getBounds();
+    if (!bounds) return;
     
-    SECTORS.forEach((sector, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = `${sector.name} (${sector.buildings.length} immeubles)`;
-        sectorSelect.appendChild(option);
+    visibleMarkers = [];
+    const visibleCount = document.getElementById('visibleCount');
+    const items = document.querySelectorAll('.building-item');
+    
+    let visibleCounter = 0;
+    
+    items.forEach((item, index) => {
+        const marker = markers[index];
+        if (marker && marker.getPosition && bounds.contains(marker.getPosition())) {
+            item.style.display = 'block';
+            visibleMarkers.push(marker);
+            visibleCounter++;
+        } else if (marker && marker.getPosition) {
+            item.style.display = 'none';
+        }
     });
+    
+    // Update visible count
+    if (visibleCount) {
+        visibleCount.textContent = `${visibleCounter} immeubles visibles`;
+    }
 }
 
 async function loadBuildings() {
@@ -426,12 +361,32 @@ async function loadBuildings() {
             bounds.extend(marker.position);
             
             listItem.innerHTML = `
-                <h4>${address}</h4>
-                <p>Lat: ${coords.lat.toFixed(6)}, Lng: ${coords.lng.toFixed(6)}</p>
-                <span class="status geocoded">Géocodé</span>
+                <input type="checkbox" class="building-checkbox" data-address="${address}" id="cb-${index}">
+                <div class="building-info">
+                    <h4>${address}</h4>
+                    <p>Lat: ${coords.lat.toFixed(6)}, Lng: ${coords.lng.toFixed(6)}</p>
+                    <span class="status geocoded">Géocodé</span>
+                </div>
             `;
             
-            listItem.addEventListener('click', () => {
+            // Add checkbox listener
+            const checkbox = listItem.querySelector('.building-checkbox');
+            checkbox.addEventListener('change', (e) => {
+                e.stopPropagation();
+                if (e.target.checked) {
+                    selectedBuildings.add(address);
+                    marker.setIcon({
+                        url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    });
+                } else {
+                    selectedBuildings.delete(address);
+                    marker.setIcon(null);
+                }
+                updateSelectedCount();
+            });
+            
+            listItem.addEventListener('click', (e) => {
+                if (e.target.type === 'checkbox') return;
                 map.setCenter({ lat: coords.lat, lng: coords.lng });
                 map.setZoom(16);
                 google.maps.event.trigger(marker, 'click');
@@ -443,9 +398,12 @@ async function loadBuildings() {
             });
         } else {
             listItem.innerHTML = `
-                <h4>${address}</h4>
-                <p>Impossible de géocoder cette adresse</p>
-                <span class="status not-geocoded">Non géocodé</span>
+                <input type="checkbox" class="building-checkbox" data-address="${address}" id="cb-${index}" disabled>
+                <div class="building-info">
+                    <h4>${address}</h4>
+                    <p>Impossible de géocoder cette adresse</p>
+                    <span class="status not-geocoded">Non géocodé</span>
+                </div>
             `;
         }
         
@@ -458,6 +416,12 @@ async function loadBuildings() {
     if (markers.length > 0) {
         map.fitBounds(bounds);
     }
+    
+    // Show all buildings initially
+    const visibleCount = document.getElementById('visibleCount');
+    if (visibleCount) {
+        visibleCount.textContent = `${geocodedCount} immeubles visibles`;
+    }
 }
 
 function updateStats(geocodedCount) {
@@ -465,36 +429,74 @@ function updateStats(geocodedCount) {
     geocodedBuildings.textContent = geocodedCount || buildingsData.filter(b => b.coordinates !== null).length;
 }
 
-async function calculateSectorRoute() {
-    const sectorSelect = document.getElementById('sectorSelect');
-    const sectorIndex = parseInt(sectorSelect.value);
+function updateSelectedCount() {
+    const selectedCount = document.getElementById('selectedCount');
+    if (selectedCount) {
+        selectedCount.textContent = selectedBuildings.size;
+    }
     
-    if (isNaN(sectorIndex)) {
-        alert('Veuillez sélectionner un secteur.');
+    const calculateSelectedBtn = document.getElementById('calculateSelectedBtn');
+    if (calculateSelectedBtn) {
+        calculateSelectedBtn.disabled = selectedBuildings.size < 2;
+    }
+}
+
+function selectAllVisible() {
+    const visibleCheckboxes = document.querySelectorAll('.building-item:not([style*="display: none"]) .building-checkbox:not(:disabled)');
+    visibleCheckboxes.forEach(checkbox => {
+        if (!checkbox.checked) {
+            checkbox.checked = true;
+            const address = checkbox.dataset.address;
+            selectedBuildings.add(address);
+            
+            // Update marker color
+            const index = BUILDINGS.indexOf(address);
+            if (markers[index]) {
+                markers[index].setIcon({
+                    url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                });
+            }
+        }
+    });
+    updateSelectedCount();
+}
+
+function deselectAll() {
+    const checkboxes = document.querySelectorAll('.building-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    selectedBuildings.clear();
+    
+    // Reset all marker colors
+    markers.forEach(marker => {
+        if (marker) {
+            marker.setIcon(null);
+        }
+    });
+    
+    updateSelectedCount();
+}
+
+function calculateSelectedRoute() {
+    if (selectedBuildings.size < 2) {
+        alert('Veuillez sélectionner au moins 2 immeubles pour calculer un trajet.');
         return;
     }
     
-    const sector = SECTORS[sectorIndex];
-    currentSector = sector;
-    
-    // Filtrer les immeubles géocodés pour ce secteur
-    const sectorBuildingsData = buildingsData.filter(b => 
-        b.coordinates !== null && sector.buildings.includes(b.originalAddress)
+    const selectedBuildingsData = buildingsData.filter(b => 
+        b.coordinates !== null && selectedBuildings.has(b.originalAddress)
     );
     
-    if (sectorBuildingsData.length < 2) {
-        alert(`Le secteur ${sector.name} doit avoir au moins 2 immeubles géocodés pour calculer un trajet.`);
+    if (selectedBuildingsData.length < 2) {
+        alert('Il faut au moins 2 immeubles géocodés pour calculer un trajet.');
         return;
     }
     
-    // Highlight sector buildings on the map
-    highlightSectorBuildings(sector);
-    
-    let buildingsToRoute = sectorBuildingsData;
-    
-    const origin = buildingsToRoute[0].coordinates;
-    const destination = buildingsToRoute[buildingsToRoute.length - 1].coordinates;
-    const waypoints = buildingsToRoute.slice(1, -1).map(b => ({
+    const origin = selectedBuildingsData[0].coordinates;
+    const destination = selectedBuildingsData[selectedBuildingsData.length - 1].coordinates;
+    const waypoints = selectedBuildingsData.slice(1, -1).map(b => ({
         location: { lat: b.coordinates.lat, lng: b.coordinates.lng },
         stopover: true
     }));
@@ -520,142 +522,18 @@ async function calculateSectorRoute() {
             }
             
             const distanceInKm = (totalDistance / 1000).toFixed(2);
-            const sectorName = currentSector ? currentSector.name : 'Groupe';
-            document.getElementById('totalDistance').textContent = `${distanceInKm} km (${buildingsToRoute.length} immeubles - ${sectorName})`;
-            
-            const optimizedOrder = result.routes[0].waypoint_order;
-            console.log('Ordre optimisé des waypoints:', optimizedOrder);
+            document.getElementById('totalDistance').textContent = `${distanceInKm} km (${selectedBuildingsData.length} immeubles sélectionnés)`;
         } else {
             alert('Erreur lors du calcul du trajet: ' + status);
         }
     });
 }
 
+
 function clearRoute() {
     directionsRenderer.setDirections({ routes: [] });
     document.getElementById('totalDistance').textContent = '-';
-    currentSector = null;
-    resetMarkerColors();
 }
-
-function highlightSectorBuildings(sector) {
-    // Reset all markers to default color first
-    resetMarkerColors();
-    
-    // Highlight sector buildings
-    markers.forEach((marker, index) => {
-        const buildingData = buildingsData[index];
-        if (buildingData && sector.buildings.includes(buildingData.originalAddress)) {
-            marker.setIcon({
-                url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-            });
-        }
-    });
-    
-    // Zoom to sector buildings
-    const bounds = new google.maps.LatLngBounds();
-    buildingsData.forEach(building => {
-        if (building.coordinates && sector.buildings.includes(building.originalAddress)) {
-            bounds.extend({ lat: building.coordinates.lat, lng: building.coordinates.lng });
-        }
-    });
-    
-    if (!bounds.isEmpty()) {
-        map.fitBounds(bounds);
-    }
-}
-
-function resetMarkerColors() {
-    markers.forEach(marker => {
-        marker.setIcon(null); // Reset to default red marker
-    });
-}
-
-function drawSectorPolygons() {
-    // Clear existing polygons
-    sectorPolygons.forEach(polygon => {
-        polygon.setMap(null);
-    });
-    sectorPolygons = [];
-    
-    // Draw new polygons for each sector
-    SECTORS.forEach((sector, index) => {
-        const polygon = new google.maps.Polygon({
-            paths: sector.bounds,
-            strokeColor: sector.color,
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: sector.color,
-            fillOpacity: 0.35,
-            clickable: true,
-            zIndex: 1
-        });
-        
-        polygon.setMap(map);
-        
-        // Add click listener to polygon
-        polygon.addListener('click', () => {
-            // Update sector select dropdown
-            document.getElementById('sectorSelect').value = index;
-            
-            // Filter buildings by this sector
-            filterBySector();
-            
-            // Show info about the sector
-            const infoWindow = new google.maps.InfoWindow({
-                content: `
-                    <div style="padding: 10px;">
-                        <h3 style="margin-bottom: 10px; color: ${sector.color};">${sector.name}</h3>
-                        <p style="margin-bottom: 5px;"><strong>${sector.buildings.length} immeubles</strong></p>
-                        <button onclick="calculateSectorRoute()" style="
-                            background: ${sector.color};
-                            color: white;
-                            border: none;
-                            padding: 8px 15px;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            font-weight: bold;
-                            margin-top: 10px;
-                        ">Calculer le trajet</button>
-                    </div>
-                `,
-                position: polygon.getPath().getAt(0)
-            });
-            
-            infoWindow.open(map);
-            
-            // Auto close after 5 seconds
-            setTimeout(() => {
-                infoWindow.close();
-            }, 5000);
-        });
-        
-        // Add mouseover effect
-        polygon.addListener('mouseover', () => {
-            polygon.setOptions({ fillOpacity: 0.5 });
-        });
-        
-        polygon.addListener('mouseout', () => {
-            polygon.setOptions({ fillOpacity: 0.35 });
-        });
-        
-        sectorPolygons.push(polygon);
-    });
-}
-
-function toggleSectorPolygons() {
-    const visible = sectorPolygons[0]?.getVisible() ?? true;
-    sectorPolygons.forEach(polygon => {
-        polygon.setVisible(!visible);
-    });
-    
-    const toggleBtn = document.getElementById('toggleSectorsBtn');
-    if (toggleBtn) {
-        toggleBtn.textContent = visible ? 'Afficher les secteurs' : 'Masquer les secteurs';
-    }
-}
-
-window.calculateSectorRoute = calculateSectorRoute;
 
 function showAllBuildings() {
     if (markers.length > 0) {
@@ -681,50 +559,21 @@ function filterBuildings() {
     });
 }
 
-function filterBySector() {
-    const sectorSelect = document.getElementById('sectorSelect');
-    const sectorIndex = sectorSelect.value;
-    const items = document.querySelectorAll('.building-item');
-    
-    if (sectorIndex === '') {
-        // Show all buildings
-        items.forEach(item => {
-            item.style.display = 'block';
-        });
-        resetMarkerColors();
-        showAllBuildings();
-    } else {
-        const sector = SECTORS[parseInt(sectorIndex)];
-        items.forEach(item => {
-            const address = item.dataset.address;
-            if (sector.buildings.includes(address)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-        highlightSectorBuildings(sector);
-    }
-    
-    // Update building count
-    const visibleItems = Array.from(items).filter(item => item.style.display !== 'none');
-    document.getElementById('buildingCount').textContent = visibleItems.length;
-}
 
 if (typeof google === 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
         document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
         document.getElementById('searchInput').addEventListener('input', filterBuildings);
-        document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
-        document.getElementById('sectorSelect').addEventListener('change', filterBySector);
-        document.getElementById('toggleSectorsBtn').addEventListener('click', toggleSectorPolygons);
+        document.getElementById('selectAllVisibleBtn').addEventListener('click', selectAllVisible);
+        document.getElementById('deselectAllBtn').addEventListener('click', deselectAll);
+        document.getElementById('calculateSelectedBtn').addEventListener('click', calculateSelectedRoute);
     });
 } else {
     document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
     document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
     document.getElementById('searchInput').addEventListener('input', filterBuildings);
-    document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
-    document.getElementById('sectorSelect').addEventListener('change', filterBySector);
-    document.getElementById('toggleSectorsBtn').addEventListener('click', toggleSectorPolygons);
+    document.getElementById('selectAllVisibleBtn').addEventListener('click', selectAllVisible);
+    document.getElementById('deselectAllBtn').addEventListener('click', deselectAll);
+    document.getElementById('calculateSelectedBtn').addEventListener('click', calculateSelectedRoute);
 }

@@ -55,19 +55,19 @@ header h1 {
     transform: translateY(0);
 }
 
-.route-controls {
+.selection-controls {
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 0.5rem 0;
 }
 
-.route-controls label {
+.selection-controls label {
     color: white;
     font-weight: 500;
 }
 
-.route-controls select {
+.selection-controls select {
     padding: 0.5rem;
     border-radius: 5px;
     border: none;
@@ -78,7 +78,7 @@ header h1 {
     min-width: 250px;
 }
 
-.route-controls button {
+.selection-controls button {
     padding: 0.5rem 1rem;
     background: white;
     color: #667eea;
@@ -89,7 +89,14 @@ header h1 {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.route-controls button:hover {
+.selection-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #e9ecef;
+    color: #999;
+}
+
+.selection-controls button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
@@ -117,9 +124,20 @@ header h1 {
 .sidebar h2 {
     color: #333;
     font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.building-counter {
+    color: #666;
+    font-size: 0.9rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #667eea;
+}
+
+.building-counter span {
+    font-weight: 600;
+    color: #667eea;
 }
 
 .search-box {
@@ -147,7 +165,17 @@ header h1 {
     margin-bottom: 1.5rem;
 }
 
+.building-checkbox {
+    margin-right: 10px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
 .building-item {
+    display: flex;
+    align-items: flex-start;
     padding: 0.8rem;
     margin-bottom: 0.5rem;
     background: #f8f9fa;
@@ -166,6 +194,10 @@ header h1 {
 .building-item.active {
     background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
     border-left-color: #764ba2;
+}
+
+.building-info {
+    flex: 1;
 }
 
 .building-item h4 {
@@ -267,26 +299,26 @@ header h1 {
         min-width: 120px;
     }
     
-    .route-controls {
+    .selection-controls {
         flex-direction: column;
         align-items: stretch;
         gap: 0.5rem;
         padding: 0.5rem 0;
     }
     
-    .route-controls label {
+    .selection-controls label {
         font-size: 0.9rem;
         margin-bottom: 0.3rem;
     }
     
-    .route-controls select {
+    .selection-controls select {
         width: 100%;
         min-width: unset;
         font-size: 0.85rem;
         padding: 0.6rem;
     }
     
-    .route-controls button {
+    .selection-controls button {
         width: 100%;
         padding: 0.6rem;
         font-size: 0.9rem;
