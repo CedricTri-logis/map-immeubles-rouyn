@@ -328,25 +328,37 @@ async function loadBuildings() {
                 // Obtenir le service Street View pour trouver le meilleur panorama
                 const streetViewService = new google.maps.StreetViewService();
                 
+                // Chercher d'abord les panoramas disponibles dans un rayon plus large
                 streetViewService.getPanoramaByLocation(
                     { lat: coords.lat, lng: coords.lng },
-                    50, // Rayon de recherche en mètres
+                    100, // Augmenter le rayon à 100m pour avoir plus d'options
                     (data, status) => {
                         let streetViewUrl;
                         
-                        if (status === google.maps.StreetViewStatus.OK) {
-                            // Calculer l'angle entre la position Street View et le bâtiment
-                            const panoLocation = data.location.latLng;
+                        if (status === google.maps.StreetViewStatus.OK && data.location) {
+                            // Position du panorama Street View
+                            const panoLat = data.location.latLng.lat();
+                            const panoLng = data.location.latLng.lng();
+                            
+                            // Calculer la direction depuis le panorama vers le bâtiment
+                            // C'est l'inverse de ce qu'on faisait avant
+                            const buildingLatLng = new google.maps.LatLng(coords.lat, coords.lng);
+                            const panoLatLng = new google.maps.LatLng(panoLat, panoLng);
+                            
+                            // L'angle pour regarder VERS le bâtiment DEPUIS la position Street View
                             const heading = google.maps.geometry.spherical.computeHeading(
-                                panoLocation, 
-                                new google.maps.LatLng(coords.lat, coords.lng)
+                                panoLatLng,  // FROM: position de la caméra
+                                buildingLatLng  // TO: position du bâtiment
                             );
                             
-                            // Utiliser la position du panorama pour une meilleure vue
-                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${panoLocation.lat()},${panoLocation.lng()}&fov=90&heading=${heading}&pitch=10&key=${apiKey}&source=outdoor`;
+                            // Utiliser directement les coordonnées du bâtiment pour être sûr d'avoir la bonne vue
+                            // Mais avec l'angle calculé pour regarder vers le bon endroit
+                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${coords.lat},${coords.lng}&fov=80&heading=${heading}&pitch=5&key=${apiKey}&source=outdoor`;
                         } else {
-                            // Fallback si pas de Street View disponible
-                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${coords.lat},${coords.lng}&fov=90&heading=0&pitch=0&key=${apiKey}&source=outdoor`;
+                            // Fallback: essayer avec plusieurs angles prédéfinis
+                            const defaultHeadings = [0, 90, 180, 270]; // N, E, S, O
+                            const randomHeading = defaultHeadings[Math.floor(Math.random() * 4)];
+                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${coords.lat},${coords.lng}&fov=80&heading=${randomHeading}&pitch=5&key=${apiKey}&source=outdoor`;
                         }
                         
                         infoWindow.setContent(`

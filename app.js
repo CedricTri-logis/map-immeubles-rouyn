@@ -1,6 +1,7 @@
 const SECTORS = [
     {
-        name: "Centre-Ville (Principale)",
+        name: "Centre-ville",
+        color: "#FF6B6B",
         buildings: [
             "31-37 Principale",
             "73-77 Principale",
@@ -12,26 +13,23 @@ const SECTORS = [
             "89 Notre-Dame",
             "96 Horne",
             "5-9 Gatineau",
-            "136 Champlain"
-        ]
-    },
-    {
-        name: "Secteur Taschereau",
-        buildings: [
+            "136 Champlain",
             "26 Taschereau E",
-            "49-53 Taschereau E",
-            "73-77 Taschereau E",
-            "89 Taschereau E",
-            "108-114 Taschereau E",
-            "375-377 Taschereau E",
-            "567 Taschereau E",
-            "633 Taschereau E",
             "44 Taschereau O",
-            "306 Taschereau O"
+            "29 Perreault E",
+            "45 Perreault E",
+            "43-45 Perreault O"
+        ],
+        bounds: [
+            { lat: 48.2450, lng: -79.0250 },
+            { lat: 48.2450, lng: -79.0100 },
+            { lat: 48.2350, lng: -79.0100 },
+            { lat: 48.2350, lng: -79.0250 }
         ]
     },
     {
-        name: "Secteur Mgr-Tessier & Mgr-Rheaume",
+        name: "Noranda",
+        color: "#4ECDC4",
         buildings: [
             "74-78 Mgr-Tessier O",
             "107 Mgr-Tessier O",
@@ -39,30 +37,29 @@ const SECTORS = [
             "110-114 Mgr-Tessier O",
             "117-119 Mgr-Tessier O",
             "123-125 Mgr-Tessier O",
+            "49-53 Taschereau E",
+            "73-77 Taschereau E",
+            "89 Taschereau E",
+            "108-114 Taschereau E",
+            "14-20 Perreault E",
+            "58-60 Perreault E",
+            "62-66 Perreault E"
+        ],
+        bounds: [
+            { lat: 48.2550, lng: -79.0200 },
+            { lat: 48.2550, lng: -79.0050 },
+            { lat: 48.2450, lng: -79.0050 },
+            { lat: 48.2450, lng: -79.0200 }
+        ]
+    },
+    {
+        name: "Rouyn-Sud",
+        color: "#95E1D3",
+        buildings: [
             "91 Mgr-Rheaume E",
             "307 Mgr-Rheaume E",
             "24 Mgr-Latulipe E",
-            "270 Mgr-Latulipe E"
-        ]
-    },
-    {
-        name: "Secteur Perreault",
-        buildings: [
-            "14-20 Perreault E",
-            "29 Perreault E",
-            "45 Perreault E",
-            "58-60 Perreault E",
-            "62-66 Perreault E",
-            "1384-1392 Perreault E",
-            "43-45 Perreault O",
-            "35-41 Pinder E",
-            "83-87 Pinder E",
-            "42-48 Pinder O"
-        ]
-    },
-    {
-        name: "Secteur Cardinal-Begin & Dallaire",
-        buildings: [
+            "270 Mgr-Latulipe E",
             "122 Cardinal-Begin E",
             "254-258 Cardinal-Begin E",
             "260-264 Cardinal-Begin E",
@@ -72,34 +69,56 @@ const SECTORS = [
             "284-288 Dallaire",
             "276-282 Gagne",
             "378-382 Gagne"
+        ],
+        bounds: [
+            { lat: 48.2350, lng: -79.0200 },
+            { lat: 48.2350, lng: -79.0050 },
+            { lat: 48.2250, lng: -79.0050 },
+            { lat: 48.2250, lng: -79.0200 }
         ]
     },
     {
-        name: "Secteur Montreal & Iberville",
+        name: "Granada",
+        color: "#F38181",
+        buildings: [
+            "2349-2357 Granada",
+            "375-377 Taschereau E",
+            "567 Taschereau E",
+            "633 Taschereau E",
+            "1384-1392 Perreault E",
+            "35-41 Pinder E",
+            "83-87 Pinder E",
+            "42-48 Pinder O"
+        ],
+        bounds: [
+            { lat: 48.2450, lng: -79.0050 },
+            { lat: 48.2450, lng: -78.9900 },
+            { lat: 48.2350, lng: -78.9900 },
+            { lat: 48.2350, lng: -79.0050 }
+        ]
+    },
+    {
+        name: "Noranda-Ouest",
+        color: "#AA96DA",
         buildings: [
             "44-48 Montreal O",
             "68-72 Montreal O",
             "355 Montreal O",
             "73-77 Iberville O",
             "80 Des Oblats O",
-            "22-28 Gamble O"
+            "22-28 Gamble O",
+            "306 Taschereau O"
+        ],
+        bounds: [
+            { lat: 48.2550, lng: -79.0350 },
+            { lat: 48.2550, lng: -79.0200 },
+            { lat: 48.2450, lng: -79.0200 },
+            { lat: 48.2450, lng: -79.0350 }
         ]
     },
     {
-        name: "Secteur Carter & 8e Rue",
-        buildings: [
-            "52 Carter",
-            "104-106 Carter",
-            "173-177 Carter",
-            "17 8e Rue",
-            "109 8e Rue",
-            "215 8e Rue",
-            "156 6e Rue",
-            "7-15 15e Rue"
-        ]
-    },
-    {
-        name: "Secteur Richard & Lariviere",
+        name: "de l'Université",
+        color: "#FCBAD3",
         buildings: [
             "469-473 Richard",
             "490 Richard",
@@ -108,23 +127,45 @@ const SECTORS = [
             "784 Lariviere",
             "992 Lariviere",
             "718 Laliberte",
-            "539 Girard"
+            "539 Girard",
+            "480 Universite",
+            "500 Boutour"
+        ],
+        bounds: [
+            { lat: 48.2650, lng: -79.0200 },
+            { lat: 48.2650, lng: -79.0050 },
+            { lat: 48.2550, lng: -79.0050 },
+            { lat: 48.2550, lng: -79.0200 }
         ]
     },
     {
-        name: "Secteur Ste-Bernadette & Nord",
+        name: "Noranda-Nord/Lac-Dufault",
+        color: "#FFFFD2",
         buildings: [
+            "52 Carter",
+            "104-106 Carter",
+            "173-177 Carter",
+            "17 8e Rue",
+            "109 8e Rue",
+            "215 8e Rue",
+            "156 6e Rue",
+            "7-15 15e Rue",
             "525-531 Ste-Bernadette",
             "628-636 Ste-Bernadette",
             "1109-1115 Charbonneau",
             "1141 du Jardin",
-            "806 Emile-Dussault",
-            "480 Universite",
-            "500 Boutour"
+            "806 Emile-Dussault"
+        ],
+        bounds: [
+            { lat: 48.2750, lng: -79.0300 },
+            { lat: 48.2750, lng: -79.0100 },
+            { lat: 48.2650, lng: -79.0100 },
+            { lat: 48.2650, lng: -79.0300 }
         ]
     },
     {
-        name: "Secteur Résidentiel Est",
+        name: "Bellecombe",
+        color: "#B8E6B8",
         buildings: [
             "154 Charlebois",
             "184-190 Tremoy",
@@ -134,16 +175,16 @@ const SECTORS = [
             "30 Gelineau",
             "32 Gelineau",
             "40 Matapedia",
-            "50-54 Mercier"
-        ]
-    },
-    {
-        name: "Secteur Granada & Riverains",
-        buildings: [
-            "2349-2357 Granada",
+            "50-54 Mercier",
             "4114 Riverains",
             "4996 Hull",
             "7313 Saguenay"
+        ],
+        bounds: [
+            { lat: 48.2250, lng: -79.0300 },
+            { lat: 48.2250, lng: -79.0100 },
+            { lat: 48.2150, lng: -79.0100 },
+            { lat: 48.2150, lng: -79.0300 }
         ]
     }
 ];
@@ -328,25 +369,37 @@ async function loadBuildings() {
                 // Obtenir le service Street View pour trouver le meilleur panorama
                 const streetViewService = new google.maps.StreetViewService();
                 
+                // Chercher d'abord les panoramas disponibles dans un rayon plus large
                 streetViewService.getPanoramaByLocation(
                     { lat: coords.lat, lng: coords.lng },
-                    50, // Rayon de recherche en mètres
+                    100, // Augmenter le rayon à 100m pour avoir plus d'options
                     (data, status) => {
                         let streetViewUrl;
                         
-                        if (status === google.maps.StreetViewStatus.OK) {
-                            // Calculer l'angle entre la position Street View et le bâtiment
-                            const panoLocation = data.location.latLng;
+                        if (status === google.maps.StreetViewStatus.OK && data.location) {
+                            // Position du panorama Street View
+                            const panoLat = data.location.latLng.lat();
+                            const panoLng = data.location.latLng.lng();
+                            
+                            // Calculer la direction depuis le panorama vers le bâtiment
+                            // C'est l'inverse de ce qu'on faisait avant
+                            const buildingLatLng = new google.maps.LatLng(coords.lat, coords.lng);
+                            const panoLatLng = new google.maps.LatLng(panoLat, panoLng);
+                            
+                            // L'angle pour regarder VERS le bâtiment DEPUIS la position Street View
                             const heading = google.maps.geometry.spherical.computeHeading(
-                                panoLocation, 
-                                new google.maps.LatLng(coords.lat, coords.lng)
+                                panoLatLng,  // FROM: position de la caméra
+                                buildingLatLng  // TO: position du bâtiment
                             );
                             
-                            // Utiliser la position du panorama pour une meilleure vue
-                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${panoLocation.lat()},${panoLocation.lng()}&fov=90&heading=${heading}&pitch=10&key=${apiKey}&source=outdoor`;
+                            // Utiliser directement les coordonnées du bâtiment pour être sûr d'avoir la bonne vue
+                            // Mais avec l'angle calculé pour regarder vers le bon endroit
+                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${coords.lat},${coords.lng}&fov=80&heading=${heading}&pitch=5&key=${apiKey}&source=outdoor`;
                         } else {
-                            // Fallback si pas de Street View disponible
-                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${coords.lat},${coords.lng}&fov=90&heading=0&pitch=0&key=${apiKey}&source=outdoor`;
+                            // Fallback: essayer avec plusieurs angles prédéfinis
+                            const defaultHeadings = [0, 90, 180, 270]; // N, E, S, O
+                            const randomHeading = defaultHeadings[Math.floor(Math.random() * 4)];
+                            streetViewUrl = `https://maps.googleapis.com/maps/api/streetview?size=400x300&location=${coords.lat},${coords.lng}&fov=80&heading=${randomHeading}&pitch=5&key=${apiKey}&source=outdoor`;
                         }
                         
                         infoWindow.setContent(`
