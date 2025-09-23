@@ -99,7 +99,6 @@ let buildingsData = new Array(BUILDINGS.length).fill(null);
 let infoWindow;
 let apiKey = '';
 let selectedBuildings = new Set();
-let visibleMarkers = [];
 
 function initializeMap() {
     const centerLatLng = { lat: 48.2396, lng: -79.0132 };
@@ -130,11 +129,6 @@ function initializeMap() {
     
     infoWindow = new google.maps.InfoWindow();
     
-    // Add map listeners for bounds changes
-    map.addListener('bounds_changed', debounce(() => {
-        updateVisibleBuildings();
-    }, 300));
-    
     loadBuildings();
 }
 
@@ -159,6 +153,7 @@ function normalizeAddress(address) {
     
     // Traitement normal pour les autres adresses
     let cleanAddress = address
+        .replace(/(\d+)\s*-\s*(\d+)/g, '$1')
         .replace(/\//g, ' ')
         .replace(/-/g, ' ')
         .replace(/\s+/g, ' ')
@@ -200,53 +195,17 @@ async function geocodeAddress(address) {
     });
 }
 
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-function updateVisibleBuildings() {
-    const bounds = map.getBounds();
-    if (!bounds) return;
-    
-    visibleMarkers = [];
-    const visibleCount = document.getElementById('visibleCount');
-    const items = document.querySelectorAll('.building-item');
-    
-    let visibleCounter = 0;
-    
-    // Only filter the list items, not the markers on the map
-    items.forEach((item, index) => {
-        const marker = markers[index];
-        if (marker && marker.getPosition && bounds.contains(marker.getPosition())) {
-            item.style.display = 'flex';  // Use flex to maintain checkbox layout
-            visibleMarkers.push(marker);
-            visibleCounter++;
-        } else {
-            item.style.display = 'none';
-        }
-    });
-    
-    // Update visible count
-    if (visibleCount) {
-        visibleCount.textContent = `${visibleCounter} immeubles visibles`;
-    }
-}
-
 async function loadBuildings() {
     const buildingList = document.getElementById('buildingList');
     const totalBuildings = document.getElementById('totalBuildings');
     const buildingCount = document.getElementById('buildingCount');
-    
+    const visibleCount = document.getElementById('visibleCount');
+
     totalBuildings.textContent = BUILDINGS.length;
     buildingCount.textContent = BUILDINGS.length;
+    if (visibleCount) {
+        visibleCount.textContent = `${BUILDINGS.length} immeubles visibles`;
+    }
     
     // Afficher un indicateur de chargement
     buildingList.innerHTML = '<div class="loading-indicator">Géocodage des adresses en cours...</div>';
@@ -257,10 +216,8 @@ async function loadBuildings() {
     // Géocoder toutes les adresses en parallèle avec un délai pour éviter les limites de taux
     const geocodePromises = BUILDINGS.map((address, index) => {
         return new Promise(async (resolve) => {
-            // Délai échelonné plus court pour éviter de surcharger l'API
-            // Groupe de 10 adresses à la fois avec 100ms entre chaque groupe
-            const groupDelay = Math.floor(index / 10) * 100;
-            await new Promise(r => setTimeout(r, groupDelay));
+            // Délai échelonné pour éviter de surcharger l'API
+            await new Promise(r => setTimeout(r, index * 50));
             
             const buildingData = {
                 originalAddress: address,
@@ -411,16 +368,12 @@ async function loadBuildings() {
     if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
-    
-    // Initial update after map is ready
-    setTimeout(() => {
-        updateVisibleBuildings();
-    }, 500);
 }
 
 function updateStats(geocodedCount) {
     const geocodedBuildings = document.getElementById('geocodedBuildings');
-    geocodedBuildings.textContent = geocodedCount || buildingsData.filter(b => b.coordinates !== null).length;
+    const computedCount = geocodedCount ?? buildingsData.filter(b => b && b.coordinates !== null).length;
+    geocodedBuildings.textContent = computedCount;
 }
 
 function updateSelectedCount() {
@@ -444,8 +397,9 @@ function selectAllVisible() {
             selectedBuildings.add(address);
             
             // Update marker color
-            const index = BUILDINGS.indexOf(address);
-            if (markers[index]) {
+            const item = checkbox.closest('.building-item');
+            const index = item ? parseInt(item.dataset.index, 10) : -1;
+            if (!Number.isNaN(index) && markers[index]) {
                 markers[index].setIcon({
                     url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
                 });
@@ -479,8 +433,8 @@ function calculateSelectedRoute() {
         return;
     }
     
-    const selectedBuildingsData = buildingsData.filter(b => 
-        b.coordinates !== null && selectedBuildings.has(b.originalAddress)
+    const selectedBuildingsData = buildingsData.filter(b =>
+        b && b.coordinates !== null && selectedBuildings.has(b.originalAddress)
     );
     
     if (selectedBuildingsData.length < 2) {
@@ -545,15 +499,22 @@ function showAllBuildings() {
 function filterBuildings() {
     const searchTerm = this.value.toLowerCase();
     const items = document.querySelectorAll('.building-item');
-    
+    let visibleCounter = 0;
+
     items.forEach(item => {
         const address = item.dataset.address.toLowerCase();
         if (address.includes(searchTerm)) {
-            item.style.display = 'block';
+            item.style.display = 'flex';
+            visibleCounter++;
         } else {
             item.style.display = 'none';
         }
     });
+
+    const visibleCount = document.getElementById('visibleCount');
+    if (visibleCount) {
+        visibleCount.textContent = `${visibleCounter} immeubles visibles`;
+    }
 }
 
 
