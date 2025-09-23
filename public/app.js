@@ -99,7 +99,6 @@ let buildingsData = new Array(BUILDINGS.length).fill(null);
 let infoWindow;
 let apiKey = '';
 let selectedBuildings = new Set();
-let visibleMarkers = [];
 
 function initializeMap() {
     const centerLatLng = { lat: 48.2396, lng: -79.0132 };
@@ -129,11 +128,6 @@ function initializeMap() {
     });
     
     infoWindow = new google.maps.InfoWindow();
-    
-    // Add map listeners for bounds changes
-    map.addListener('bounds_changed', debounce(() => {
-        updateVisibleBuildings();
-    }, 300));
     
     loadBuildings();
 }
@@ -377,7 +371,8 @@ async function loadBuildings() {
 
 function updateStats(geocodedCount) {
     const geocodedBuildings = document.getElementById('geocodedBuildings');
-    geocodedBuildings.textContent = geocodedCount || buildingsData.filter(b => b.coordinates !== null).length;
+    const computedCount = geocodedCount ?? buildingsData.filter(b => b && b.coordinates !== null).length;
+    geocodedBuildings.textContent = computedCount;
 }
 
 function updateSelectedCount() {
@@ -436,8 +431,8 @@ function calculateSelectedRoute() {
         return;
     }
     
-    const selectedBuildingsData = buildingsData.filter(b => 
-        b.coordinates !== null && selectedBuildings.has(b.originalAddress)
+    const selectedBuildingsData = buildingsData.filter(b =>
+        b && b.coordinates !== null && selectedBuildings.has(b.originalAddress)
     );
     
     if (selectedBuildingsData.length < 2) {
@@ -502,15 +497,22 @@ function showAllBuildings() {
 function filterBuildings() {
     const searchTerm = this.value.toLowerCase();
     const items = document.querySelectorAll('.building-item');
-    
+    let visibleCounter = 0;
+
     items.forEach(item => {
         const address = item.dataset.address.toLowerCase();
         if (address.includes(searchTerm)) {
             item.style.display = 'block';
+            visibleCounter++;
         } else {
             item.style.display = 'none';
         }
     });
+
+    const visibleCount = document.getElementById('visibleCount');
+    if (visibleCount) {
+        visibleCount.textContent = `${visibleCounter} immeubles visibles`;
+    }
 }
 
 
