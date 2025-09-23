@@ -1,6 +1,5 @@
 const BUILDINGS = [
     "104-106 Carter",
-    "156 6e Rue",
     "107 Mgr-Tessier O",
     "108-114 Taschereau E",
     "109-113 Mgr-Tessier O",
@@ -18,7 +17,6 @@ const BUILDINGS = [
     "184-190 Tremoy",
     "187-193 Principale",
     "194-198 Chenier",
-    "567 Taschereau E",
     "2-6 Sam-Laporte",
     "22-28 Gamble O",
     "234-238 Principale",
@@ -132,18 +130,10 @@ function initializeMap() {
     
     infoWindow = new google.maps.InfoWindow();
     
-    // Add map listeners for bounds changes (but not on initial load)
-    let isInitialLoad = true;
+    // Add map listeners for bounds changes
     map.addListener('bounds_changed', debounce(() => {
-        if (!isInitialLoad) {
-            updateVisibleBuildings();
-        }
+        updateVisibleBuildings();
     }, 300));
-    
-    // After initial load, allow filtering
-    setTimeout(() => {
-        isInitialLoad = false;
-    }, 2000);
     
     loadBuildings();
 }
@@ -232,13 +222,14 @@ function updateVisibleBuildings() {
     
     let visibleCounter = 0;
     
+    // Only filter the list items, not the markers on the map
     items.forEach((item, index) => {
         const marker = markers[index];
         if (marker && marker.getPosition && bounds.contains(marker.getPosition())) {
-            item.style.display = 'block';
+            item.style.display = 'flex';  // Use flex to maintain checkbox layout
             visibleMarkers.push(marker);
             visibleCounter++;
-        } else if (marker && marker.getPosition) {
+        } else {
             item.style.display = 'none';
         }
     });
@@ -266,8 +257,10 @@ async function loadBuildings() {
     // Géocoder toutes les adresses en parallèle avec un délai pour éviter les limites de taux
     const geocodePromises = BUILDINGS.map((address, index) => {
         return new Promise(async (resolve) => {
-            // Délai échelonné pour éviter de surcharger l'API
-            await new Promise(r => setTimeout(r, index * 50));
+            // Délai échelonné plus court pour éviter de surcharger l'API
+            // Groupe de 10 adresses à la fois avec 100ms entre chaque groupe
+            const groupDelay = Math.floor(index / 10) * 100;
+            await new Promise(r => setTimeout(r, groupDelay));
             
             const buildingData = {
                 originalAddress: address,
@@ -417,11 +410,10 @@ async function loadBuildings() {
         map.fitBounds(bounds);
     }
     
-    // Show all buildings initially
-    const visibleCount = document.getElementById('visibleCount');
-    if (visibleCount) {
-        visibleCount.textContent = `${geocodedCount} immeubles visibles`;
-    }
+    // Initial update after map is ready
+    setTimeout(() => {
+        updateVisibleBuildings();
+    }, 500);
 }
 
 function updateStats(geocodedCount) {
