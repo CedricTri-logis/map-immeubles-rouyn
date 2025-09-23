@@ -1,6 +1,7 @@
 const SECTORS = [
     {
-        name: "Centre-Ville (Principale)",
+        name: "Centre-ville",
+        color: "#FF6B6B",
         buildings: [
             "31-37 Principale",
             "73-77 Principale",
@@ -12,26 +13,23 @@ const SECTORS = [
             "89 Notre-Dame",
             "96 Horne",
             "5-9 Gatineau",
-            "136 Champlain"
-        ]
-    },
-    {
-        name: "Secteur Taschereau",
-        buildings: [
+            "136 Champlain",
             "26 Taschereau E",
-            "49-53 Taschereau E",
-            "73-77 Taschereau E",
-            "89 Taschereau E",
-            "108-114 Taschereau E",
-            "375-377 Taschereau E",
-            "567 Taschereau E",
-            "633 Taschereau E",
             "44 Taschereau O",
-            "306 Taschereau O"
+            "29 Perreault E",
+            "45 Perreault E",
+            "43-45 Perreault O"
+        ],
+        bounds: [
+            { lat: 48.2450, lng: -79.0250 },
+            { lat: 48.2450, lng: -79.0100 },
+            { lat: 48.2350, lng: -79.0100 },
+            { lat: 48.2350, lng: -79.0250 }
         ]
     },
     {
-        name: "Secteur Mgr-Tessier & Mgr-Rheaume",
+        name: "Noranda",
+        color: "#4ECDC4",
         buildings: [
             "74-78 Mgr-Tessier O",
             "107 Mgr-Tessier O",
@@ -39,30 +37,29 @@ const SECTORS = [
             "110-114 Mgr-Tessier O",
             "117-119 Mgr-Tessier O",
             "123-125 Mgr-Tessier O",
+            "49-53 Taschereau E",
+            "73-77 Taschereau E",
+            "89 Taschereau E",
+            "108-114 Taschereau E",
+            "14-20 Perreault E",
+            "58-60 Perreault E",
+            "62-66 Perreault E"
+        ],
+        bounds: [
+            { lat: 48.2550, lng: -79.0200 },
+            { lat: 48.2550, lng: -79.0050 },
+            { lat: 48.2450, lng: -79.0050 },
+            { lat: 48.2450, lng: -79.0200 }
+        ]
+    },
+    {
+        name: "Rouyn-Sud",
+        color: "#95E1D3",
+        buildings: [
             "91 Mgr-Rheaume E",
             "307 Mgr-Rheaume E",
             "24 Mgr-Latulipe E",
-            "270 Mgr-Latulipe E"
-        ]
-    },
-    {
-        name: "Secteur Perreault",
-        buildings: [
-            "14-20 Perreault E",
-            "29 Perreault E",
-            "45 Perreault E",
-            "58-60 Perreault E",
-            "62-66 Perreault E",
-            "1384-1392 Perreault E",
-            "43-45 Perreault O",
-            "35-41 Pinder E",
-            "83-87 Pinder E",
-            "42-48 Pinder O"
-        ]
-    },
-    {
-        name: "Secteur Cardinal-Begin & Dallaire",
-        buildings: [
+            "270 Mgr-Latulipe E",
             "122 Cardinal-Begin E",
             "254-258 Cardinal-Begin E",
             "260-264 Cardinal-Begin E",
@@ -72,34 +69,56 @@ const SECTORS = [
             "284-288 Dallaire",
             "276-282 Gagne",
             "378-382 Gagne"
+        ],
+        bounds: [
+            { lat: 48.2350, lng: -79.0200 },
+            { lat: 48.2350, lng: -79.0050 },
+            { lat: 48.2250, lng: -79.0050 },
+            { lat: 48.2250, lng: -79.0200 }
         ]
     },
     {
-        name: "Secteur Montreal & Iberville",
+        name: "Granada",
+        color: "#F38181",
+        buildings: [
+            "2349-2357 Granada",
+            "375-377 Taschereau E",
+            "567 Taschereau E",
+            "633 Taschereau E",
+            "1384-1392 Perreault E",
+            "35-41 Pinder E",
+            "83-87 Pinder E",
+            "42-48 Pinder O"
+        ],
+        bounds: [
+            { lat: 48.2450, lng: -79.0050 },
+            { lat: 48.2450, lng: -78.9900 },
+            { lat: 48.2350, lng: -78.9900 },
+            { lat: 48.2350, lng: -79.0050 }
+        ]
+    },
+    {
+        name: "Noranda-Ouest",
+        color: "#AA96DA",
         buildings: [
             "44-48 Montreal O",
             "68-72 Montreal O",
             "355 Montreal O",
             "73-77 Iberville O",
             "80 Des Oblats O",
-            "22-28 Gamble O"
+            "22-28 Gamble O",
+            "306 Taschereau O"
+        ],
+        bounds: [
+            { lat: 48.2550, lng: -79.0350 },
+            { lat: 48.2550, lng: -79.0200 },
+            { lat: 48.2450, lng: -79.0200 },
+            { lat: 48.2450, lng: -79.0350 }
         ]
     },
     {
-        name: "Secteur Carter & 8e Rue",
-        buildings: [
-            "52 Carter",
-            "104-106 Carter",
-            "173-177 Carter",
-            "17 8e Rue",
-            "109 8e Rue",
-            "215 8e Rue",
-            "156 6e Rue",
-            "7-15 15e Rue"
-        ]
-    },
-    {
-        name: "Secteur Richard & Lariviere",
+        name: "de l'Université",
+        color: "#FCBAD3",
         buildings: [
             "469-473 Richard",
             "490 Richard",
@@ -108,23 +127,45 @@ const SECTORS = [
             "784 Lariviere",
             "992 Lariviere",
             "718 Laliberte",
-            "539 Girard"
+            "539 Girard",
+            "480 Universite",
+            "500 Boutour"
+        ],
+        bounds: [
+            { lat: 48.2650, lng: -79.0200 },
+            { lat: 48.2650, lng: -79.0050 },
+            { lat: 48.2550, lng: -79.0050 },
+            { lat: 48.2550, lng: -79.0200 }
         ]
     },
     {
-        name: "Secteur Ste-Bernadette & Nord",
+        name: "Noranda-Nord/Lac-Dufault",
+        color: "#FFFFD2",
         buildings: [
+            "52 Carter",
+            "104-106 Carter",
+            "173-177 Carter",
+            "17 8e Rue",
+            "109 8e Rue",
+            "215 8e Rue",
+            "156 6e Rue",
+            "7-15 15e Rue",
             "525-531 Ste-Bernadette",
             "628-636 Ste-Bernadette",
             "1109-1115 Charbonneau",
             "1141 du Jardin",
-            "806 Emile-Dussault",
-            "480 Universite",
-            "500 Boutour"
+            "806 Emile-Dussault"
+        ],
+        bounds: [
+            { lat: 48.2750, lng: -79.0300 },
+            { lat: 48.2750, lng: -79.0100 },
+            { lat: 48.2650, lng: -79.0100 },
+            { lat: 48.2650, lng: -79.0300 }
         ]
     },
     {
-        name: "Secteur Résidentiel Est",
+        name: "Bellecombe",
+        color: "#B8E6B8",
         buildings: [
             "154 Charlebois",
             "184-190 Tremoy",
@@ -134,16 +175,16 @@ const SECTORS = [
             "30 Gelineau",
             "32 Gelineau",
             "40 Matapedia",
-            "50-54 Mercier"
-        ]
-    },
-    {
-        name: "Secteur Granada & Riverains",
-        buildings: [
-            "2349-2357 Granada",
+            "50-54 Mercier",
             "4114 Riverains",
             "4996 Hull",
             "7313 Saguenay"
+        ],
+        bounds: [
+            { lat: 48.2250, lng: -79.0300 },
+            { lat: 48.2250, lng: -79.0100 },
+            { lat: 48.2150, lng: -79.0100 },
+            { lat: 48.2150, lng: -79.0300 }
         ]
     }
 ];
@@ -159,6 +200,7 @@ let buildingsData = [];
 let infoWindow;
 let apiKey = '';
 let currentSector = null;
+let sectorPolygons = [];
 
 function initializeMap() {
     const centerLatLng = { lat: 48.2396, lng: -79.0132 };
@@ -192,6 +234,9 @@ function initializeMap() {
     // Populate sectors dropdown before loading buildings
     populateSectorSelect();
     
+    // Draw sector polygons on map
+    drawSectorPolygons();
+    
     loadBuildings();
 }
 
@@ -204,7 +249,9 @@ function normalizeAddress(address) {
         "187-193 Principale": "187 Avenue Principale, Rouyn-Noranda, QC J9X 4P5, Canada",
         "234-238 Principale": "234 Avenue Principale, Rouyn-Noranda, QC J9X 4P6, Canada",
         "296-300 Principale": "296 Avenue Principale, Rouyn-Noranda, QC J9X 4P7, Canada",
-        "31-37 Principale": "31 Avenue Principale, Rouyn-Noranda, QC J9X 4P1, Canada"
+        "31-37 Principale": "31 Avenue Principale, Rouyn-Noranda, QC J9X 4P1, Canada",
+        "4996 Hull": "4996 Rang Hull, Rouyn-Noranda, QC, Canada",
+        "7313 Saguenay": "7313 Rang Saguenay, Rouyn-Noranda, QC, Canada"
     };
     
     // Vérifier si c'est un cas spécial
@@ -524,6 +571,92 @@ function resetMarkerColors() {
     });
 }
 
+function drawSectorPolygons() {
+    // Clear existing polygons
+    sectorPolygons.forEach(polygon => {
+        polygon.setMap(null);
+    });
+    sectorPolygons = [];
+    
+    // Draw new polygons for each sector
+    SECTORS.forEach((sector, index) => {
+        const polygon = new google.maps.Polygon({
+            paths: sector.bounds,
+            strokeColor: sector.color,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: sector.color,
+            fillOpacity: 0.35,
+            clickable: true,
+            zIndex: 1
+        });
+        
+        polygon.setMap(map);
+        
+        // Add click listener to polygon
+        polygon.addListener('click', () => {
+            // Update sector select dropdown
+            document.getElementById('sectorSelect').value = index;
+            
+            // Filter buildings by this sector
+            filterBySector();
+            
+            // Show info about the sector
+            const infoWindow = new google.maps.InfoWindow({
+                content: `
+                    <div style="padding: 10px;">
+                        <h3 style="margin-bottom: 10px; color: ${sector.color};">${sector.name}</h3>
+                        <p style="margin-bottom: 5px;"><strong>${sector.buildings.length} immeubles</strong></p>
+                        <button onclick="calculateSectorRoute()" style="
+                            background: ${sector.color};
+                            color: white;
+                            border: none;
+                            padding: 8px 15px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-weight: bold;
+                            margin-top: 10px;
+                        ">Calculer le trajet</button>
+                    </div>
+                `,
+                position: polygon.getPath().getAt(0)
+            });
+            
+            infoWindow.open(map);
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                infoWindow.close();
+            }, 5000);
+        });
+        
+        // Add mouseover effect
+        polygon.addListener('mouseover', () => {
+            polygon.setOptions({ fillOpacity: 0.5 });
+        });
+        
+        polygon.addListener('mouseout', () => {
+            polygon.setOptions({ fillOpacity: 0.35 });
+        });
+        
+        sectorPolygons.push(polygon);
+    });
+}
+
+function toggleSectorPolygons() {
+    const visible = sectorPolygons[0]?.getVisible() ?? true;
+    sectorPolygons.forEach(polygon => {
+        polygon.setVisible(!visible);
+    });
+    
+    const toggleBtn = document.getElementById('toggleSectorsBtn');
+    if (toggleBtn) {
+        toggleBtn.textContent = visible ? 'Afficher les secteurs' : 'Masquer les secteurs';
+    }
+}
+
+window.calculateSectorRoute = calculateSectorRoute;
+
 function showAllBuildings() {
     if (markers.length > 0) {
         const bounds = new google.maps.LatLngBounds();
@@ -585,6 +718,7 @@ if (typeof google === 'undefined') {
         document.getElementById('searchInput').addEventListener('input', filterBuildings);
         document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
         document.getElementById('sectorSelect').addEventListener('change', filterBySector);
+        document.getElementById('toggleSectorsBtn').addEventListener('click', toggleSectorPolygons);
     });
 } else {
     document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
@@ -592,4 +726,5 @@ if (typeof google === 'undefined') {
     document.getElementById('searchInput').addEventListener('input', filterBuildings);
     document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
     document.getElementById('sectorSelect').addEventListener('change', filterBySector);
+    document.getElementById('toggleSectorsBtn').addEventListener('click', toggleSectorPolygons);
 }

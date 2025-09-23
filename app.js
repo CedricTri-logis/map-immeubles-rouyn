@@ -200,6 +200,7 @@ let buildingsData = [];
 let infoWindow;
 let apiKey = '';
 let currentSector = null;
+let sectorPolygons = [];
 
 function initializeMap() {
     const centerLatLng = { lat: 48.2396, lng: -79.0132 };
@@ -233,6 +234,9 @@ function initializeMap() {
     // Populate sectors dropdown before loading buildings
     populateSectorSelect();
     
+    // Draw sector polygons on map
+    drawSectorPolygons();
+    
     loadBuildings();
 }
 
@@ -245,7 +249,9 @@ function normalizeAddress(address) {
         "187-193 Principale": "187 Avenue Principale, Rouyn-Noranda, QC J9X 4P5, Canada",
         "234-238 Principale": "234 Avenue Principale, Rouyn-Noranda, QC J9X 4P6, Canada",
         "296-300 Principale": "296 Avenue Principale, Rouyn-Noranda, QC J9X 4P7, Canada",
-        "31-37 Principale": "31 Avenue Principale, Rouyn-Noranda, QC J9X 4P1, Canada"
+        "31-37 Principale": "31 Avenue Principale, Rouyn-Noranda, QC J9X 4P1, Canada",
+        "4996 Hull": "4996 Rang Hull, Rouyn-Noranda, QC, Canada",
+        "7313 Saguenay": "7313 Rang Saguenay, Rouyn-Noranda, QC, Canada"
     };
     
     // Vérifier si c'est un cas spécial
@@ -565,6 +571,92 @@ function resetMarkerColors() {
     });
 }
 
+function drawSectorPolygons() {
+    // Clear existing polygons
+    sectorPolygons.forEach(polygon => {
+        polygon.setMap(null);
+    });
+    sectorPolygons = [];
+    
+    // Draw new polygons for each sector
+    SECTORS.forEach((sector, index) => {
+        const polygon = new google.maps.Polygon({
+            paths: sector.bounds,
+            strokeColor: sector.color,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: sector.color,
+            fillOpacity: 0.35,
+            clickable: true,
+            zIndex: 1
+        });
+        
+        polygon.setMap(map);
+        
+        // Add click listener to polygon
+        polygon.addListener('click', () => {
+            // Update sector select dropdown
+            document.getElementById('sectorSelect').value = index;
+            
+            // Filter buildings by this sector
+            filterBySector();
+            
+            // Show info about the sector
+            const infoWindow = new google.maps.InfoWindow({
+                content: `
+                    <div style="padding: 10px;">
+                        <h3 style="margin-bottom: 10px; color: ${sector.color};">${sector.name}</h3>
+                        <p style="margin-bottom: 5px;"><strong>${sector.buildings.length} immeubles</strong></p>
+                        <button onclick="calculateSectorRoute()" style="
+                            background: ${sector.color};
+                            color: white;
+                            border: none;
+                            padding: 8px 15px;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-weight: bold;
+                            margin-top: 10px;
+                        ">Calculer le trajet</button>
+                    </div>
+                `,
+                position: polygon.getPath().getAt(0)
+            });
+            
+            infoWindow.open(map);
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                infoWindow.close();
+            }, 5000);
+        });
+        
+        // Add mouseover effect
+        polygon.addListener('mouseover', () => {
+            polygon.setOptions({ fillOpacity: 0.5 });
+        });
+        
+        polygon.addListener('mouseout', () => {
+            polygon.setOptions({ fillOpacity: 0.35 });
+        });
+        
+        sectorPolygons.push(polygon);
+    });
+}
+
+function toggleSectorPolygons() {
+    const visible = sectorPolygons[0]?.getVisible() ?? true;
+    sectorPolygons.forEach(polygon => {
+        polygon.setVisible(!visible);
+    });
+    
+    const toggleBtn = document.getElementById('toggleSectorsBtn');
+    if (toggleBtn) {
+        toggleBtn.textContent = visible ? 'Afficher les secteurs' : 'Masquer les secteurs';
+    }
+}
+
+window.calculateSectorRoute = calculateSectorRoute;
+
 function showAllBuildings() {
     if (markers.length > 0) {
         const bounds = new google.maps.LatLngBounds();
@@ -626,6 +718,7 @@ if (typeof google === 'undefined') {
         document.getElementById('searchInput').addEventListener('input', filterBuildings);
         document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
         document.getElementById('sectorSelect').addEventListener('change', filterBySector);
+        document.getElementById('toggleSectorsBtn').addEventListener('click', toggleSectorPolygons);
     });
 } else {
     document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
@@ -633,4 +726,5 @@ if (typeof google === 'undefined') {
     document.getElementById('searchInput').addEventListener('input', filterBuildings);
     document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
     document.getElementById('sectorSelect').addEventListener('change', filterBySector);
+    document.getElementById('toggleSectorsBtn').addEventListener('click', toggleSectorPolygons);
 }
