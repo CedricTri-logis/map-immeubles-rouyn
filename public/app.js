@@ -204,9 +204,13 @@ async function loadBuildings() {
     const buildingList = document.getElementById('buildingList');
     const totalBuildings = document.getElementById('totalBuildings');
     const buildingCount = document.getElementById('buildingCount');
-    
+    const visibleCount = document.getElementById('visibleCount');
+
     totalBuildings.textContent = BUILDINGS.length;
     buildingCount.textContent = BUILDINGS.length;
+    if (visibleCount) {
+        visibleCount.textContent = `${BUILDINGS.length} immeubles visibles`;
+    }
     
     // Afficher un indicateur de chargement
     buildingList.innerHTML = '<div class="loading-indicator">Géocodage des adresses en cours...</div>';
@@ -217,10 +221,8 @@ async function loadBuildings() {
     // Géocoder toutes les adresses en parallèle avec un délai pour éviter les limites de taux
     const geocodePromises = BUILDINGS.map((address, index) => {
         return new Promise(async (resolve) => {
-            // Délai échelonné plus court pour éviter de surcharger l'API
-            // Groupe de 10 adresses à la fois avec 100ms entre chaque groupe
-            const groupDelay = Math.floor(index / 10) * 100;
-            await new Promise(r => setTimeout(r, groupDelay));
+            // Délai échelonné pour éviter de surcharger l'API
+            await new Promise(r => setTimeout(r, index * 50));
             
             const buildingData = {
                 originalAddress: address,
@@ -371,11 +373,6 @@ async function loadBuildings() {
     if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
-    
-    // Initial update after map is ready
-    setTimeout(() => {
-        updateVisibleBuildings();
-    }, 500);
 }
 
 function updateStats(geocodedCount) {
