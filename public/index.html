@@ -10,23 +10,21 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Mes Immeubles à Rouyn-Noranda</h1>
-            <div class="controls">
-                <button id="showAllBtn">Afficher tous les immeubles</button>
-                <button id="clearRouteBtn">Effacer le trajet</button>
-            </div>
-            <div class="selection-controls">
-                <button id="selectAllVisibleBtn">Sélectionner les visibles</button>
-                <button id="deselectAllBtn">Tout désélectionner</button>
-                <button id="calculateSelectedBtn" disabled>Calculer le trajet (<span id="selectedCount">0</span>)</button>
-            </div>
-        </header>
-        
         <div class="main-content">
             <div id="map"></div>
             
             <aside class="sidebar">
+                <div class="sidebar-controls">
+                    <div class="primary-actions">
+                        <button id="showAllBtn">Afficher tous les immeubles</button>
+                        <button id="clearRouteBtn">Effacer le trajet</button>
+                    </div>
+                    <div class="secondary-actions">
+                        <button id="selectAllVisibleBtn">Sélectionner les visibles</button>
+                        <button id="deselectAllBtn">Tout désélectionner</button>
+                        <button id="calculateSelectedBtn" disabled>Calculer le trajet (<span id="selectedCount">0</span>)</button>
+                    </div>
+                </div>
                 <h2>Liste des immeubles</h2>
                 <div class="building-counter">
                     <span id="visibleCount">0 immeubles visibles</span> / <span id="buildingCount">0</span> total
