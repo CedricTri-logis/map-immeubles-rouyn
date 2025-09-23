@@ -91,11 +91,11 @@ const BUILDINGS = [
 ];
 
 let map;
-let markers = [];
+let markers = new Array(BUILDINGS.length).fill(null);
 let directionsService;
 let directionsRenderer;
 let geocoder;
-let buildingsData = [];
+let buildingsData = new Array(BUILDINGS.length).fill(null);
 let infoWindow;
 let apiKey = '';
 let selectedBuildings = new Set();
@@ -275,7 +275,7 @@ async function loadBuildings() {
                 geocodedCount++;
             }
             
-            resolve({ address, coords, buildingData });
+            resolve({ index, address, coords, buildingData });
         });
     });
     
@@ -286,10 +286,11 @@ async function loadBuildings() {
     buildingList.innerHTML = '';
     
     // Créer tous les marqueurs et éléments de liste en une fois
-    results.forEach(({ address, coords, buildingData }) => {
+    results.forEach(({ index, address, coords, buildingData }) => {
         const listItem = document.createElement('div');
         listItem.className = 'building-item';
         listItem.dataset.address = address;
+        listItem.dataset.index = index;
         
         if (coords) {
             const marker = new google.maps.Marker({
@@ -350,7 +351,7 @@ async function loadBuildings() {
             });
             
             buildingData.marker = marker;
-            markers.push(marker);
+            markers[index] = marker;
             bounds.extend(marker.position);
             
             listItem.innerHTML = `
@@ -398,15 +399,16 @@ async function loadBuildings() {
                     <span class="status not-geocoded">Non géocodé</span>
                 </div>
             `;
+            markers[index] = null;
         }
         
         buildingList.appendChild(listItem);
-        buildingsData.push(buildingData);
+        buildingsData[index] = buildingData;
     });
     
     updateStats(geocodedCount);
     
-    if (markers.length > 0) {
+    if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
     
@@ -528,11 +530,14 @@ function clearRoute() {
 }
 
 function showAllBuildings() {
-    if (markers.length > 0) {
-        const bounds = new google.maps.LatLngBounds();
-        markers.forEach(marker => {
-            bounds.extend(marker.position);
-        });
+    const bounds = new google.maps.LatLngBounds();
+    markers.forEach(marker => {
+        if (marker && marker.getPosition) {
+            bounds.extend(marker.getPosition());
+        }
+    });
+
+    if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
 }
