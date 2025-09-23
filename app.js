@@ -1,97 +1,154 @@
-const BUILDINGS = [
-    "104-106 Carter",
-    "156 6e Rue",
-    "107 Mgr-Tessier O",
-    "108-114 Taschereau E",
-    "109-113 Mgr-Tessier O",
-    "110-114 Mgr-Tessier O",
-    "1109-1115 Charbonneau",
-    "1141 du Jardin",
-    "117-119 Mgr-Tessier O",
-    "123-125 Mgr-Tessier O",
-    "1384-1392 Perreault E",
-    "14-20 Perreault E",
-    "151-159 Principale",
-    "154 Charlebois",
-    "17 8e Rue",
-    "173-177 Carter",
-    "184-190 Tremoy",
-    "187-193 Principale",
-    "194-198 Chenier",
-    "567 Taschereau E",
-    "2-6 Sam-Laporte",
-    "22-28 Gamble O",
-    "234-238 Principale",
-    "2349-2357 Granada",
-    "24 Mgr-Latulipe E",
-    "254-258 Cardinal-Begin E",
-    "26 Bertrand",
-    "26 Taschereau E",
-    "260-264 Cardinal-Begin E",
-    "270 Mgr-Latulipe E",
-    "276-282 Gagne",
-    "284-288 Dallaire",
-    "29 Perreault E",
-    "296-300 Principale",
-    "30 Gelineau",
-    "31-37 Principale",
-    "32 Gelineau",
-    "35-41 Pinder E",
-    "375-377 Taschereau E",
-    "378-382 Gagne",
-    "40 Matapedia",
-    "4114 Riverains",
-    "42-48 Pinder O",
-    "43-45 Perreault O",
-    "44 Taschereau O",
-    "44-48 Montreal O",
-    "45 Perreault E",
-    "469-473 Richard",
-    "480 Universite",
-    "49-53 Taschereau E",
-    "4996 Hull",
-    "50-54 Mercier",
-    "500 Boutour",
-    "525-531 Ste-Bernadette",
-    "529-531 Richard",
-    "539 Girard",
-    "58-60 Perreault E",
-    "587 Lariviere",
-    "62-66 Perreault E",
-    "628-636 Ste-Bernadette",
-    "633 Taschereau E",
-    "68-72 Montreal O",
-    "7-15 15e Rue",
-    "73-77 Iberville O",
-    "73-77 Taschereau E",
-    "7313 Saguenay",
-    "74-78 Mgr-Tessier O",
-    "784 Lariviere",
-    "80 Des Oblats O",
-    "806 Emile-Dussault",
-    "83-87 Pinder E",
-    "89 Notre-Dame",
-    "91 Mgr-Rheaume E",
-    "96 Horne",
-    "992 Lariviere",
-    "103-105 Dallaire",
-    "718 Laliberte",
-    "490 Richard",
-    "307 Mgr-Rheaume E",
-    "308 Cardinal-Begin E",
-    "122 Cardinal-Begin E",
-    "89 Taschereau E",
-    "355 Montreal O",
-    "79-87 Principale",
-    "73-77 Principale",
-    "109 8e Rue",
-    "215 8e Rue",
-    "52 Carter",
-    "136 Champlain",
-    "5-9 Gatineau",
-    "110 Dallaire",
-    "306 Taschereau O"
+const SECTORS = [
+    {
+        name: "Centre-Ville (Principale)",
+        buildings: [
+            "31-37 Principale",
+            "73-77 Principale",
+            "79-87 Principale",
+            "151-159 Principale",
+            "187-193 Principale",
+            "234-238 Principale",
+            "296-300 Principale",
+            "89 Notre-Dame",
+            "96 Horne",
+            "5-9 Gatineau",
+            "136 Champlain"
+        ]
+    },
+    {
+        name: "Secteur Taschereau",
+        buildings: [
+            "26 Taschereau E",
+            "49-53 Taschereau E",
+            "73-77 Taschereau E",
+            "89 Taschereau E",
+            "108-114 Taschereau E",
+            "375-377 Taschereau E",
+            "567 Taschereau E",
+            "633 Taschereau E",
+            "44 Taschereau O",
+            "306 Taschereau O"
+        ]
+    },
+    {
+        name: "Secteur Mgr-Tessier & Mgr-Rheaume",
+        buildings: [
+            "74-78 Mgr-Tessier O",
+            "107 Mgr-Tessier O",
+            "109-113 Mgr-Tessier O",
+            "110-114 Mgr-Tessier O",
+            "117-119 Mgr-Tessier O",
+            "123-125 Mgr-Tessier O",
+            "91 Mgr-Rheaume E",
+            "307 Mgr-Rheaume E",
+            "24 Mgr-Latulipe E",
+            "270 Mgr-Latulipe E"
+        ]
+    },
+    {
+        name: "Secteur Perreault",
+        buildings: [
+            "14-20 Perreault E",
+            "29 Perreault E",
+            "45 Perreault E",
+            "58-60 Perreault E",
+            "62-66 Perreault E",
+            "1384-1392 Perreault E",
+            "43-45 Perreault O",
+            "35-41 Pinder E",
+            "83-87 Pinder E",
+            "42-48 Pinder O"
+        ]
+    },
+    {
+        name: "Secteur Cardinal-Begin & Dallaire",
+        buildings: [
+            "122 Cardinal-Begin E",
+            "254-258 Cardinal-Begin E",
+            "260-264 Cardinal-Begin E",
+            "308 Cardinal-Begin E",
+            "103-105 Dallaire",
+            "110 Dallaire",
+            "284-288 Dallaire",
+            "276-282 Gagne",
+            "378-382 Gagne"
+        ]
+    },
+    {
+        name: "Secteur Montreal & Iberville",
+        buildings: [
+            "44-48 Montreal O",
+            "68-72 Montreal O",
+            "355 Montreal O",
+            "73-77 Iberville O",
+            "80 Des Oblats O",
+            "22-28 Gamble O"
+        ]
+    },
+    {
+        name: "Secteur Carter & 8e Rue",
+        buildings: [
+            "52 Carter",
+            "104-106 Carter",
+            "173-177 Carter",
+            "17 8e Rue",
+            "109 8e Rue",
+            "215 8e Rue",
+            "156 6e Rue",
+            "7-15 15e Rue"
+        ]
+    },
+    {
+        name: "Secteur Richard & Lariviere",
+        buildings: [
+            "469-473 Richard",
+            "490 Richard",
+            "529-531 Richard",
+            "587 Lariviere",
+            "784 Lariviere",
+            "992 Lariviere",
+            "718 Laliberte",
+            "539 Girard"
+        ]
+    },
+    {
+        name: "Secteur Ste-Bernadette & Nord",
+        buildings: [
+            "525-531 Ste-Bernadette",
+            "628-636 Ste-Bernadette",
+            "1109-1115 Charbonneau",
+            "1141 du Jardin",
+            "806 Emile-Dussault",
+            "480 Universite",
+            "500 Boutour"
+        ]
+    },
+    {
+        name: "Secteur Résidentiel Est",
+        buildings: [
+            "154 Charlebois",
+            "184-190 Tremoy",
+            "194-198 Chenier",
+            "2-6 Sam-Laporte",
+            "26 Bertrand",
+            "30 Gelineau",
+            "32 Gelineau",
+            "40 Matapedia",
+            "50-54 Mercier"
+        ]
+    },
+    {
+        name: "Secteur Granada & Riverains",
+        buildings: [
+            "2349-2357 Granada",
+            "4114 Riverains",
+            "4996 Hull",
+            "7313 Saguenay"
+        ]
+    }
 ];
+
+const BUILDINGS = SECTORS.flatMap(sector => sector.buildings);
 
 let map;
 let markers = [];
@@ -101,6 +158,7 @@ let geocoder;
 let buildingsData = [];
 let infoWindow;
 let apiKey = '';
+let currentSector = null;
 
 function initializeMap() {
     const centerLatLng = { lat: 48.2396, lng: -79.0132 };
@@ -110,10 +168,11 @@ function initializeMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 13,
         center: centerLatLng,
-        mapTypeControl: true,
-        streetViewControl: true,
+        mapTypeControl: window.innerWidth > 768,
+        streetViewControl: window.innerWidth > 768,
         fullscreenControl: true,
-        zoomControl: true
+        zoomControl: true,
+        gestureHandling: 'greedy' // Better mobile touch handling
     });
     
     geocoder = new google.maps.Geocoder();
@@ -129,6 +188,9 @@ function initializeMap() {
     });
     
     infoWindow = new google.maps.InfoWindow();
+    
+    // Populate sectors dropdown before loading buildings
+    populateSectorSelect();
     
     loadBuildings();
 }
@@ -190,6 +252,18 @@ async function geocodeAddress(address) {
                 resolve(null);
             }
         });
+    });
+}
+
+function populateSectorSelect() {
+    const sectorSelect = document.getElementById('sectorSelect');
+    sectorSelect.innerHTML = '<option value="">-- Sélectionnez un secteur --</option>';
+    
+    SECTORS.forEach((sector, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${sector.name} (${sector.buildings.length} immeubles)`;
+        sectorSelect.appendChild(option);
     });
 }
 
@@ -332,36 +406,32 @@ function updateStats(geocodedCount) {
     geocodedBuildings.textContent = geocodedCount || buildingsData.filter(b => b.coordinates !== null).length;
 }
 
-async function calculateGroupRoute(groupIndex) {
-    const geocodedBuildings = buildingsData.filter(b => b.coordinates !== null);
+async function calculateSectorRoute() {
+    const sectorSelect = document.getElementById('sectorSelect');
+    const sectorIndex = parseInt(sectorSelect.value);
     
-    if (geocodedBuildings.length < 2) {
-        alert('Il faut au moins 2 immeubles géocodés pour calculer un trajet.');
+    if (isNaN(sectorIndex)) {
+        alert('Veuillez sélectionner un secteur.');
         return;
     }
     
-    let buildingsToRoute = [];
+    const sector = SECTORS[sectorIndex];
+    currentSector = sector;
     
-    if (groupIndex === 'all') {
-        // Pour tous les immeubles, on prend les 25 premiers pour l'instant
-        alert(`Calcul du trajet pour tous les immeubles. Vue la limite de 25 waypoints, seuls les 25 premiers seront inclus.`);
-        buildingsToRoute = geocodedBuildings.slice(0, 25);
-    } else {
-        // Calcul pour un groupe spécifique
-        const startIdx = parseInt(groupIndex) * 25;
-        const endIdx = Math.min(startIdx + 25, geocodedBuildings.length);
-        buildingsToRoute = geocodedBuildings.slice(startIdx, endIdx);
-        
-        if (buildingsToRoute.length === 0) {
-            alert('Aucun immeuble dans ce groupe.');
-            return;
-        }
-        
-        if (buildingsToRoute.length === 1) {
-            alert('Un seul immeuble dans ce groupe, impossible de calculer un trajet.');
-            return;
-        }
+    // Filtrer les immeubles géocodés pour ce secteur
+    const sectorBuildingsData = buildingsData.filter(b => 
+        b.coordinates !== null && sector.buildings.includes(b.originalAddress)
+    );
+    
+    if (sectorBuildingsData.length < 2) {
+        alert(`Le secteur ${sector.name} doit avoir au moins 2 immeubles géocodés pour calculer un trajet.`);
+        return;
     }
+    
+    // Highlight sector buildings on the map
+    highlightSectorBuildings(sector);
+    
+    let buildingsToRoute = sectorBuildingsData;
     
     const origin = buildingsToRoute[0].coordinates;
     const destination = buildingsToRoute[buildingsToRoute.length - 1].coordinates;
@@ -391,7 +461,8 @@ async function calculateGroupRoute(groupIndex) {
             }
             
             const distanceInKm = (totalDistance / 1000).toFixed(2);
-            document.getElementById('totalDistance').textContent = `${distanceInKm} km (${buildingsToRoute.length} immeubles)`;
+            const sectorName = currentSector ? currentSector.name : 'Groupe';
+            document.getElementById('totalDistance').textContent = `${distanceInKm} km (${buildingsToRoute.length} immeubles - ${sectorName})`;
             
             const optimizedOrder = result.routes[0].waypoint_order;
             console.log('Ordre optimisé des waypoints:', optimizedOrder);
@@ -404,6 +475,41 @@ async function calculateGroupRoute(groupIndex) {
 function clearRoute() {
     directionsRenderer.setDirections({ routes: [] });
     document.getElementById('totalDistance').textContent = '-';
+    currentSector = null;
+    resetMarkerColors();
+}
+
+function highlightSectorBuildings(sector) {
+    // Reset all markers to default color first
+    resetMarkerColors();
+    
+    // Highlight sector buildings
+    markers.forEach((marker, index) => {
+        const buildingData = buildingsData[index];
+        if (buildingData && sector.buildings.includes(buildingData.originalAddress)) {
+            marker.setIcon({
+                url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+            });
+        }
+    });
+    
+    // Zoom to sector buildings
+    const bounds = new google.maps.LatLngBounds();
+    buildingsData.forEach(building => {
+        if (building.coordinates && sector.buildings.includes(building.originalAddress)) {
+            bounds.extend({ lat: building.coordinates.lat, lng: building.coordinates.lng });
+        }
+    });
+    
+    if (!bounds.isEmpty()) {
+        map.fitBounds(bounds);
+    }
+}
+
+function resetMarkerColors() {
+    markers.forEach(marker => {
+        marker.setIcon(null); // Reset to default red marker
+    });
 }
 
 function showAllBuildings() {
@@ -430,32 +536,48 @@ function filterBuildings() {
     });
 }
 
+function filterBySector() {
+    const sectorSelect = document.getElementById('sectorSelect');
+    const sectorIndex = sectorSelect.value;
+    const items = document.querySelectorAll('.building-item');
+    
+    if (sectorIndex === '') {
+        // Show all buildings
+        items.forEach(item => {
+            item.style.display = 'block';
+        });
+        resetMarkerColors();
+        showAllBuildings();
+    } else {
+        const sector = SECTORS[parseInt(sectorIndex)];
+        items.forEach(item => {
+            const address = item.dataset.address;
+            if (sector.buildings.includes(address)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        highlightSectorBuildings(sector);
+    }
+    
+    // Update building count
+    const visibleItems = Array.from(items).filter(item => item.style.display !== 'none');
+    document.getElementById('buildingCount').textContent = visibleItems.length;
+}
+
 if (typeof google === 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
         document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
         document.getElementById('searchInput').addEventListener('input', filterBuildings);
-        document.getElementById('calculateGroupRouteBtn').addEventListener('click', () => {
-            const groupSelect = document.getElementById('groupSelect');
-            const selectedGroup = groupSelect.value;
-            if (selectedGroup) {
-                calculateGroupRoute(selectedGroup);
-            } else {
-                alert('Veuillez sélectionner un groupe.');
-            }
-        });
+        document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
+        document.getElementById('sectorSelect').addEventListener('change', filterBySector);
     });
 } else {
     document.getElementById('showAllBtn').addEventListener('click', showAllBuildings);
     document.getElementById('clearRouteBtn').addEventListener('click', clearRoute);
     document.getElementById('searchInput').addEventListener('input', filterBuildings);
-    document.getElementById('calculateGroupRouteBtn').addEventListener('click', () => {
-        const groupSelect = document.getElementById('groupSelect');
-        const selectedGroup = groupSelect.value;
-        if (selectedGroup) {
-            calculateGroupRoute(selectedGroup);
-        } else {
-            alert('Veuillez sélectionner un groupe.');
-        }
-    });
+    document.getElementById('calculateSectorRouteBtn').addEventListener('click', calculateSectorRoute);
+    document.getElementById('sectorSelect').addEventListener('change', filterBySector);
 }
