@@ -9,9 +9,8 @@
     let isMapExpanded = true;
     
     // Heights for different states
-    const COLLAPSED_HEIGHT = 80; // Just shows handle
-    const PEEK_HEIGHT = 200; // Shows a bit of map
-    const FULL_HEIGHT_PERCENT = 60; // 60% of viewport
+    const HANDLE_HEIGHT = 60; // Height of the drag handle
+    const FULL_HEIGHT_PERCENT = 100; // 100% of viewport for full screen map
     
     // Initialize drawer functionality
     function initializeMapDrawer() {
@@ -48,7 +47,7 @@
             </div>
         `;
         dragHandle.style.cssText = `
-            height: ${COLLAPSED_HEIGHT}px;
+            height: ${HANDLE_HEIGHT}px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             cursor: grab;
             display: flex;
@@ -93,11 +92,20 @@
         mapDrawer.appendChild(mapElement);
         document.body.appendChild(mapDrawer);
         
-        // Set initial height
-        mapHeight = window.innerHeight * (FULL_HEIGHT_PERCENT / 100);
+        // Set initial height (full screen minus handle)
+        mapHeight = window.innerHeight - HANDLE_HEIGHT;
         mapElement.style.height = `${mapHeight}px`;
-        mapDrawer.style.height = `${mapHeight + COLLAPSED_HEIGHT}px`;
-        mapDrawer.style.transform = 'translateY(0)';
+        mapDrawer.style.height = `${window.innerHeight}px`;
+        
+        // Start collapsed (map hidden)
+        isMapExpanded = false;
+        mapDrawer.style.transform = `translateY(${mapHeight}px)`;
+        
+        // Update arrow and text for collapsed state
+        const arrow = dragHandle.querySelector('.handle-arrow');
+        if (arrow) arrow.style.transform = 'rotate(180deg)';
+        const label = dragHandle.querySelector('.handle-label');
+        if (label) label.textContent = 'Glisser pour ouvrir';
         
         // Adjust sidebar to account for map drawer
         adjustSidebarForDrawer();
@@ -116,8 +124,8 @@
             sidebar.style.cssText += `
                 position: relative;
                 height: auto;
-                min-height: 100vh;
-                padding-bottom: ${isMapExpanded ? mapHeight + COLLAPSED_HEIGHT : COLLAPSED_HEIGHT}px;
+                min-height: calc(100vh - ${HANDLE_HEIGHT}px);
+                padding-bottom: ${HANDLE_HEIGHT}px;
             `;
         }
     }
@@ -162,7 +170,7 @@
             newTranslateY = Math.max(0, deltaY);
         } else {
             // If collapsed, only allow dragging up
-            newTranslateY = Math.min(0, deltaY + (mapHeight - PEEK_HEIGHT));
+            newTranslateY = Math.min(0, deltaY + mapHeight);
         }
         
         mapDrawer.style.transform = `translateY(${newTranslateY}px)`;
@@ -209,7 +217,7 @@
         }
     }
     
-    // Expand map to full height
+    // Expand map to full screen
     function expandMap() {
         isMapExpanded = true;
         mapDrawer.style.transform = 'translateY(0)';
@@ -222,10 +230,10 @@
         const label = dragHandle.querySelector('.handle-label');
         if (label) label.textContent = 'Glisser pour fermer';
         
-        // Adjust sidebar
+        // Hide sidebar when map is full screen
         const sidebar = document.querySelector('.sidebar');
         if (sidebar && window.innerWidth <= 768) {
-            sidebar.style.paddingBottom = `${mapHeight + COLLAPSED_HEIGHT}px`;
+            sidebar.style.display = 'none';
         }
         
         // Trigger map resize
@@ -236,10 +244,10 @@
         }
     }
     
-    // Collapse map to show only handle
+    // Collapse map completely (only handle visible)
     function collapseMap() {
         isMapExpanded = false;
-        mapDrawer.style.transform = `translateY(${mapHeight - PEEK_HEIGHT}px)`;
+        mapDrawer.style.transform = `translateY(${mapHeight}px)`;
         
         // Rotate arrow down
         const arrow = dragHandle.querySelector('.handle-arrow');
@@ -249,10 +257,10 @@
         const label = dragHandle.querySelector('.handle-label');
         if (label) label.textContent = 'Glisser pour ouvrir';
         
-        // Adjust sidebar
+        // Show sidebar when map is collapsed
         const sidebar = document.querySelector('.sidebar');
         if (sidebar && window.innerWidth <= 768) {
-            sidebar.style.paddingBottom = `${COLLAPSED_HEIGHT + PEEK_HEIGHT}px`;
+            sidebar.style.display = 'block';
         }
     }
     
@@ -287,15 +295,15 @@
         
         // Update map height if drawer exists
         if (mapDrawer) {
-            mapHeight = window.innerHeight * (FULL_HEIGHT_PERCENT / 100);
+            mapHeight = window.innerHeight - HANDLE_HEIGHT;
             const mapElement = document.getElementById('map');
             if (mapElement) {
                 mapElement.style.height = `${mapHeight}px`;
             }
-            mapDrawer.style.height = `${mapHeight + COLLAPSED_HEIGHT}px`;
+            mapDrawer.style.height = `${window.innerHeight}px`;
             
             if (!isMapExpanded) {
-                mapDrawer.style.transform = `translateY(${mapHeight - PEEK_HEIGHT}px)`;
+                mapDrawer.style.transform = `translateY(${mapHeight}px)`;
             }
         }
     }
