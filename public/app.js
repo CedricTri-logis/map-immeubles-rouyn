@@ -44,7 +44,7 @@ const BUILDINGS = [
     "44-48 Montreal O",
     "45 Perreault E",
     "469-473 Richard",
-    "480 Universite",
+    "480 Boulevard de l'Université",
     "49-53 Taschereau E",
     "4996 Hull",
     "50-54 Mercier",
