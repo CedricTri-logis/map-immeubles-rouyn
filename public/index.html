@@ -21,6 +21,22 @@
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="Rechercher une adresse...">
                 </div>
+                
+                <!-- TSP Route Optimization Controls -->
+                <div class="route-controls">
+                    <h3>Optimisation du trajet</h3>
+                    <label for="startingPoint">Point de départ:</label>
+                    <select id="startingPoint">
+                        <option value="">Choisir une adresse de départ...</option>
+                    </select>
+                    <div class="button-group">
+                        <button id="selectAllBtn" class="btn-secondary">Sélectionner tout</button>
+                        <button id="optimizeRouteBtn" class="btn-primary" disabled>Optimiser le trajet</button>
+                    </div>
+                    <button id="exportRouteBtn" class="btn-export" style="display: none;">Exporter la liste optimisée</button>
+                    <button id="clearOptimizedBtn" class="btn-clear" style="display: none;">Effacer le trajet</button>
+                </div>
+                
                 <div id="buildingList" class="building-list"></div>
                 
                 <div class="stats">
@@ -28,6 +44,7 @@
                     <div id="stats">
                         <p>Total immeubles: <span id="totalBuildings">0</span></p>
                         <p>Immeubles géocodés: <span id="geocodedBuildings">0</span></p>
+                        <p>Immeubles sélectionnés: <span id="selectedCount">0</span></p>
                         <p>Distance totale du trajet: <span id="totalDistance">-</span></p>
                     </div>
                 </div>
@@ -36,6 +53,7 @@
     </div>
     
     <script src="app.js"></script>
+    <script src="tsp-optimizer.js"></script>
     <script>
         fetch('/api/config')
             .then(response => response.json())

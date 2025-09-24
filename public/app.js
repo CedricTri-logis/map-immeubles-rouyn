@@ -368,6 +368,11 @@ async function loadBuildings() {
     if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
+    
+    // Initialize TSP controls after buildings are loaded
+    if (typeof populateStartingPointDropdown === 'function') {
+        populateStartingPointDropdown();
+    }
 }
 
 function updateStats(geocodedCount) {
@@ -385,6 +390,13 @@ function updateSelectedCount() {
     const calculateSelectedBtn = document.getElementById('calculateSelectedBtn');
     if (calculateSelectedBtn) {
         calculateSelectedBtn.disabled = selectedBuildings.size < 2;
+    }
+    
+    // Update optimize button state for TSP
+    const startingPoint = document.getElementById('startingPoint');
+    const optimizeBtn = document.getElementById('optimizeRouteBtn');
+    if (optimizeBtn && startingPoint) {
+        optimizeBtn.disabled = !startingPoint.value || selectedBuildings.size === 0;
     }
 }
 
