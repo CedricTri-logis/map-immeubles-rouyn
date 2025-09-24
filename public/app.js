@@ -393,6 +393,11 @@ window.updateSelectedCount = function() {
     if (calculateSelectedBtn) {
         calculateSelectedBtn.disabled = window.selectedBuildings.size < 2;
     }
+    
+    // Also update the optimize button state when selection changes
+    if (typeof updateOptimizeButtonState === 'function') {
+        updateOptimizeButtonState();
+    }
 }
 
 function selectAllVisible() {

@@ -713,7 +713,22 @@ function selectAllForRoute() {
     });
     
     updateSelectedCount();
+    updateOptimizeButtonState();
     console.log(`${window.selectedBuildings.size} immeubles sélectionnés`);
+}
+
+// Function to update the Optimize button state
+window.updateOptimizeButtonState = function() {
+    const optimizeBtn = document.getElementById('optimizeRouteBtn');
+    const startingPointDropdown = document.getElementById('startingPoint');
+    
+    if (optimizeBtn && startingPointDropdown) {
+        // Enable button only if a starting point is selected AND at least one building is selected
+        const hasStartingPoint = startingPointDropdown.value !== '';
+        const hasSelectedBuildings = window.selectedBuildings && window.selectedBuildings.size > 0;
+        
+        optimizeBtn.disabled = !(hasStartingPoint && hasSelectedBuildings);
+    }
 }
 
 // Populate starting point dropdown
@@ -763,6 +778,12 @@ function initializeTSPControls() {
     const selectAllBtn = document.getElementById('selectAllBtn');
     if (selectAllBtn) {
         selectAllBtn.addEventListener('click', selectAllForRoute);
+    }
+    
+    // Add event listener for starting point dropdown
+    const startingPointDropdown = document.getElementById('startingPoint');
+    if (startingPointDropdown) {
+        startingPointDropdown.addEventListener('change', window.updateOptimizeButtonState);
     }
     
     const exportBtn = document.getElementById('exportRouteBtn');
