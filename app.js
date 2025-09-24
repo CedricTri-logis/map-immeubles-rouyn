@@ -17,7 +17,6 @@ const BUILDINGS = [
     "184-190 Tremoy",
     "187-193 Principale",
     "194-198 Chenier",
-    "2-6 Sam-Laporte",
     "22-28 Gamble O",
     "234-238 Principale",
     "2349-2357 Granada",
@@ -61,7 +60,6 @@ const BUILDINGS = [
     "7-15 15e Rue",
     "73-77 Iberville O",
     "73-77 Taschereau E",
-    "7313 Saguenay",
     "74-78 Mgr-Tessier O",
     "784 Lariviere",
     "80 Des Oblats O",
@@ -142,8 +140,7 @@ function normalizeAddress(address) {
         "234-238 Principale": "234 Avenue Principale, Rouyn-Noranda, QC J9X 4P6, Canada",
         "296-300 Principale": "296 Avenue Principale, Rouyn-Noranda, QC J9X 4P7, Canada",
         "31-37 Principale": "31 Avenue Principale, Rouyn-Noranda, QC J9X 4P1, Canada",
-        "4996 Hull": "4996 Rang Hull, Rouyn-Noranda, QC, Canada",
-        "7313 Saguenay": "7313 rue saguenay, Rouyn-Noranda, QC, Canada"
+        "4996 Hull": "4996 Rang Hull, Rouyn-Noranda, QC, Canada"
     };
     
     // Vérifier si c'est un cas spécial
