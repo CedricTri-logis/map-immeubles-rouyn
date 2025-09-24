@@ -548,6 +548,12 @@ function generateNavigationLinks(routeIndices) {
         packHeader.textContent = `Pack ${packIndex + 1}: Immeubles ${startNum} à ${endNum}`;
         packDiv.appendChild(packHeader);
         
+        // Add note about starting from current location
+        const packNote = document.createElement('p');
+        packNote.style.cssText = 'font-size: 0.8rem; color: #666; margin: 0.5rem 0;';
+        packNote.textContent = '📍 Navigation depuis votre position actuelle';
+        packDiv.appendChild(packNote);
+        
         // Get coordinates and normalized addresses for Google Maps URL
         const locations = pack.map(index => {
             const building = buildingsData[index];
@@ -574,14 +580,16 @@ function generateNavigationLinks(routeIndices) {
         }).filter(loc => loc !== null);
         
         if (locations.length > 0) {
-            // Build Google Maps URL using normalized addresses for better display
+            // Build Google Maps URL starting from user's current location
             let mapsUrl = 'https://www.google.com/maps/dir/';
             
-            // Use encoded normalized addresses for each waypoint
-            locations.forEach((loc, idx) => {
+            // Start from current location
+            mapsUrl += 'Current+Location';
+            
+            // Add all building addresses as waypoints
+            locations.forEach((loc) => {
                 const encodedAddress = encodeURIComponent(loc.normalizedAddress);
-                if (idx > 0) mapsUrl += '/';
-                mapsUrl += encodedAddress;
+                mapsUrl += '/' + encodedAddress;
             });
             
             // Add parameters for driving mode
@@ -597,8 +605,8 @@ function generateNavigationLinks(routeIndices) {
             navButton.rel = 'noopener noreferrer';
             navButton.className = 'nav-button';
             navButton.innerHTML = `
-                <span class="nav-icon">🗺️</span>
-                <span>Naviguer Pack ${packIndex + 1}</span>
+                <span class="nav-icon">📍</span>
+                <span>Naviguer depuis ma position</span>
                 <span class="nav-count">${locations.length} arrêts</span>
             `;
             
