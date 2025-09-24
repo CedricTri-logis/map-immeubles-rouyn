@@ -548,35 +548,34 @@ function generateNavigationLinks(routeIndices) {
         packHeader.textContent = `Pack ${packIndex + 1}: Immeubles ${startNum} à ${endNum}`;
         packDiv.appendChild(packHeader);
         
-        // Create Google Maps URL with waypoints
-        const addresses = pack.map(index => {
+        // Get coordinates for Google Maps URL
+        const locations = pack.map(index => {
             const building = buildingsData[index];
-            if (building && building.originalAddress) {
-                // Encode address for URL
-                return encodeURIComponent(`${building.originalAddress}, Rouyn-Noranda, QC, Canada`);
+            if (building && building.coordinates) {
+                return {
+                    lat: building.coordinates.lat.toFixed(6),
+                    lng: building.coordinates.lng.toFixed(6),
+                    address: building.originalAddress
+                };
             }
             return null;
-        }).filter(addr => addr !== null);
+        }).filter(loc => loc !== null);
         
-        if (addresses.length > 0) {
-            // Google Maps URL format: origin -> waypoints -> destination
+        if (locations.length > 0) {
+            // Build Google Maps URL using coordinates for better accuracy
             let mapsUrl = 'https://www.google.com/maps/dir/';
             
-            // Add origin (first address)
-            mapsUrl += addresses[0] + '/';
+            // Add each location using lat,lng format
+            locations.forEach((loc, idx) => {
+                // Use coordinates for accuracy: latitude,longitude
+                mapsUrl += `${loc.lat},${loc.lng}/`;
+            });
             
-            // Add waypoints (middle addresses)
-            for (let i = 1; i < addresses.length - 1; i++) {
-                mapsUrl += addresses[i] + '/';
-            }
+            // Add parameters for driving mode
+            mapsUrl += 'data=!3m1!4b1!4m2!4m1!3e0';
             
-            // Add destination (last address if more than 1)
-            if (addresses.length > 1) {
-                mapsUrl += addresses[addresses.length - 1] + '/';
-            }
-            
-            // Add travel mode
-            mapsUrl += 'data=!4m2!4m1!3e0'; // 3e0 = driving mode
+            // Log for debugging
+            console.log(`Pack ${packIndex + 1} URL:`, mapsUrl);
             
             // Create button
             const navButton = document.createElement('a');
@@ -587,7 +586,7 @@ function generateNavigationLinks(routeIndices) {
             navButton.innerHTML = `
                 <span class="nav-icon">🗺️</span>
                 <span>Naviguer Pack ${packIndex + 1}</span>
-                <span class="nav-count">${addresses.length} arrêts</span>
+                <span class="nav-count">${locations.length} arrêts</span>
             `;
             
             // List of addresses in this pack
