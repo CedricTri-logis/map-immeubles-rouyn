@@ -89,16 +89,16 @@ const BUILDINGS = [
 ];
 
 let map;
-let markers = new Array(BUILDINGS.length).fill(null);
+window.markers = new Array(BUILDINGS.length).fill(null);
 let directionsService;
 let directionsRenderer;
 let geocoder;
-let buildingsData = new Array(BUILDINGS.length).fill(null);
+window.buildingsData = new Array(BUILDINGS.length).fill(null);
 let infoWindow;
 let apiKey = '';
-let selectedBuildings = new Set();
+window.selectedBuildings = new Set();
 
-function initializeMap() {
+window.initializeMap = function() {
     const centerLatLng = { lat: 48.2396, lng: -79.0132 };
     
     apiKey = window.googleMapsApiKey;
@@ -305,7 +305,7 @@ async function loadBuildings() {
             });
             
             buildingData.marker = marker;
-            markers[index] = marker;
+            window.markers[index] = marker;
             bounds.extend(marker.position);
             
             listItem.innerHTML = `
@@ -322,12 +322,12 @@ async function loadBuildings() {
             checkbox.addEventListener('change', (e) => {
                 e.stopPropagation();
                 if (e.target.checked) {
-                    selectedBuildings.add(address);
+                    window.selectedBuildings.add(address);
                     marker.setIcon({
                         url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
                     });
                 } else {
-                    selectedBuildings.delete(address);
+                    window.selectedBuildings.delete(address);
                     marker.setIcon(null);
                 }
                 updateSelectedCount();
@@ -353,11 +353,11 @@ async function loadBuildings() {
                     <span class="status not-geocoded">Non géocodé</span>
                 </div>
             `;
-            markers[index] = null;
+            window.markers[index] = null;
         }
         
         buildingList.appendChild(listItem);
-        buildingsData[index] = buildingData;
+        window.buildingsData[index] = buildingData;
     });
     
     updateStats(geocodedCount);
@@ -365,23 +365,33 @@ async function loadBuildings() {
     if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
     }
+    
+    // Populate the starting point dropdown after buildings are loaded
+    if (typeof populateStartingPointDropdown === 'function') {
+        populateStartingPointDropdown();
+    }
+    
+    // Also call TSP initialization
+    if (typeof initializeTSPControls === 'function') {
+        initializeTSPControls();
+    }
 }
 
 function updateStats(geocodedCount) {
     const geocodedBuildings = document.getElementById('geocodedBuildings');
-    const computedCount = geocodedCount ?? buildingsData.filter(b => b && b.coordinates !== null).length;
+    const computedCount = geocodedCount ?? window.buildingsData.filter(b => b && b.coordinates !== null).length;
     geocodedBuildings.textContent = computedCount;
 }
 
-function updateSelectedCount() {
+window.updateSelectedCount = function() {
     const selectedCount = document.getElementById('selectedCount');
     if (selectedCount) {
-        selectedCount.textContent = selectedBuildings.size;
+        selectedCount.textContent = window.selectedBuildings.size;
     }
     
     const calculateSelectedBtn = document.getElementById('calculateSelectedBtn');
     if (calculateSelectedBtn) {
-        calculateSelectedBtn.disabled = selectedBuildings.size < 2;
+        calculateSelectedBtn.disabled = window.selectedBuildings.size < 2;
     }
 }
 
@@ -391,13 +401,13 @@ function selectAllVisible() {
         if (!checkbox.checked) {
             checkbox.checked = true;
             const address = checkbox.dataset.address;
-            selectedBuildings.add(address);
+            window.selectedBuildings.add(address);
             
             // Update marker color
             const item = checkbox.closest('.building-item');
             const index = item ? parseInt(item.dataset.index, 10) : -1;
-            if (!Number.isNaN(index) && markers[index]) {
-                markers[index].setIcon({
+            if (!Number.isNaN(index) && window.markers[index]) {
+                window.markers[index].setIcon({
                     url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
                 });
             }
@@ -412,10 +422,10 @@ function deselectAll() {
         checkbox.checked = false;
     });
     
-    selectedBuildings.clear();
+    window.selectedBuildings.clear();
     
     // Reset all marker colors
-    markers.forEach(marker => {
+    window.markers.forEach(marker => {
         if (marker) {
             marker.setIcon(null);
         }
@@ -425,13 +435,13 @@ function deselectAll() {
 }
 
 function calculateSelectedRoute() {
-    if (selectedBuildings.size < 2) {
+    if (window.selectedBuildings.size < 2) {
         alert('Veuillez sélectionner au moins 2 immeubles pour calculer un trajet.');
         return;
     }
     
-    const selectedBuildingsData = buildingsData.filter(b =>
-        b && b.coordinates !== null && selectedBuildings.has(b.originalAddress)
+    const selectedBuildingsData = window.buildingsData.filter(b =>
+        b && b.coordinates !== null && window.selectedBuildings.has(b.originalAddress)
     );
     
     if (selectedBuildingsData.length < 2) {
@@ -482,7 +492,7 @@ function clearRoute() {
 
 function showAllBuildings() {
     const bounds = new google.maps.LatLngBounds();
-    markers.forEach(marker => {
+    window.markers.forEach(marker => {
         if (marker && marker.getPosition) {
             bounds.extend(marker.getPosition());
         }

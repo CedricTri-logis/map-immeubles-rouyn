@@ -192,7 +192,7 @@ async function optimizeRoute() {
         return;
     }
     
-    if (selectedBuildings.size === 0) {
+    if (window.selectedBuildings.size === 0) {
         alert('Veuillez sélectionner au moins un immeuble à visiter.');
         return;
     }
@@ -206,18 +206,18 @@ async function optimizeRoute() {
         const selectedBuildingsData = [];
         const selectedIndices = [];
         
-        buildingsData.forEach((building, index) => {
-            if (building && building.coordinates && selectedBuildings.has(building.originalAddress)) {
+        window.buildingsData.forEach((building, index) => {
+            if (building && building.coordinates && window.selectedBuildings.has(building.originalAddress)) {
                 selectedBuildingsData.push(building.coordinates);
                 selectedIndices.push(index);
             }
         });
         
         // Add starting point if not already selected
-        const startBuilding = buildingsData[startIndex];
+        const startBuilding = window.buildingsData[startIndex];
         let startingPointIndex = 0;
         
-        if (!selectedBuildings.has(startBuilding.originalAddress)) {
+        if (!window.selectedBuildings.has(startBuilding.originalAddress)) {
             selectedBuildingsData.unshift(startBuilding.coordinates);
             selectedIndices.unshift(startIndex);
         } else {
@@ -352,7 +352,7 @@ function displayOptimizedRoute(routeIndices) {
     
     // Get coordinates
     const routeCoords = routeIndices.map(index => {
-        const building = buildingsData[index];
+        const building = window.buildingsData[index];
         if (building && building.coordinates) {
             const pos = { lat: building.coordinates.lat, lng: building.coordinates.lng };
             bounds.extend(pos);
@@ -368,7 +368,7 @@ function displayOptimizedRoute(routeIndices) {
     
     // Update ALL markers with numbers
     routeIndices.forEach((index, position) => {
-        const marker = markers[index];
+        const marker = window.markers[index];
         if (marker) {
             const markerLabel = {
                 text: (position + 1).toString(),
@@ -458,9 +458,9 @@ function clearOptimizedRoute() {
     }
     
     // Reset markers
-    markers.forEach((marker, index) => {
+    window.markers.forEach((marker, index) => {
         if (marker) {
-            if (selectedBuildings.has(buildingsData[index].originalAddress)) {
+            if (window.selectedBuildings.has(window.buildingsData[index].originalAddress)) {
                 marker.setIcon({
                     url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
                 });
@@ -556,7 +556,7 @@ function generateNavigationLinks(routeIndices) {
         
         // Get coordinates and normalized addresses for Google Maps URL
         const locations = pack.map(index => {
-            const building = buildingsData[index];
+            const building = window.buildingsData[index];
             if (building && building.coordinates) {
                 // Normalize the address to match Google's format
                 let normalizedAddress = building.originalAddress
@@ -614,7 +614,7 @@ function generateNavigationLinks(routeIndices) {
             const addressList = document.createElement('ul');
             addressList.className = 'pack-addresses';
             pack.forEach((index, position) => {
-                const building = buildingsData[index];
+                const building = window.buildingsData[index];
                 if (building) {
                     const li = document.createElement('li');
                     const globalPosition = packIndex * packSize + position + 1;
@@ -652,7 +652,7 @@ function exportOptimizedRoute() {
     exportText += '----------------\n\n';
     
     optimizedRoute.forEach((index, position) => {
-        const building = buildingsData[index];
+        const building = window.buildingsData[index];
         if (building) {
             const order = (position + 1).toString().padStart(2, '0');
             exportText += `${order}. ${building.originalAddress}`;
@@ -673,7 +673,7 @@ function exportOptimizedRoute() {
         exportText += `GROUPE ${groupNum} (${i + 1} à ${groupEnd}):\n`;
         
         for (let j = i; j < groupEnd; j++) {
-            const building = buildingsData[optimizedRoute[j]];
+            const building = window.buildingsData[optimizedRoute[j]];
             if (building) {
                 exportText += `${j + 1}. ${building.originalAddress}\n`;
             }
@@ -701,23 +701,23 @@ function selectAllForRoute() {
     checkboxes.forEach(checkbox => {
         checkbox.checked = true;
         const address = checkbox.dataset.address;
-        selectedBuildings.add(address);
+        window.selectedBuildings.add(address);
         
         const item = checkbox.closest('.building-item');
         const index = item ? parseInt(item.dataset.index, 10) : -1;
-        if (!Number.isNaN(index) && markers[index]) {
-            markers[index].setIcon({
+        if (!Number.isNaN(index) && window.markers[index]) {
+            window.markers[index].setIcon({
                 url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
             });
         }
     });
     
     updateSelectedCount();
-    console.log(`${selectedBuildings.size} immeubles sélectionnés`);
+    console.log(`${window.selectedBuildings.size} immeubles sélectionnés`);
 }
 
 // Populate starting point dropdown
-function populateStartingPointDropdown() {
+window.populateStartingPointDropdown = function() {
     const dropdown = document.getElementById('startingPoint');
     if (!dropdown) return;
     
@@ -725,7 +725,7 @@ function populateStartingPointDropdown() {
     
     // Create sorted list
     const sortedBuildings = [];
-    buildingsData.forEach((building, index) => {
+    window.buildingsData.forEach((building, index) => {
         if (building && building.coordinates) {
             sortedBuildings.push({ index, address: building.originalAddress });
         }
@@ -744,17 +744,15 @@ function populateStartingPointDropdown() {
     dropdown.addEventListener('change', () => {
         const optimizeBtn = document.getElementById('optimizeRouteBtn');
         if (optimizeBtn) {
-            optimizeBtn.disabled = !dropdown.value || selectedBuildings.size === 0;
+            optimizeBtn.disabled = !dropdown.value || window.selectedBuildings.size === 0;
         }
     });
 }
 
 // Initialize TSP controls
 function initializeTSPControls() {
-    // Populate dropdown after buildings are loaded
-    if (typeof populateStartingPointDropdown === 'function') {
-        setTimeout(populateStartingPointDropdown, 1000);
-    }
+    // Populate dropdown (now called directly after buildings are loaded)
+    // No need for timeout since we're calling this after buildings are loaded
     
     // Add event listeners
     const optimizeBtn = document.getElementById('optimizeRouteBtn');
