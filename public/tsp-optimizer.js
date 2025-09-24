@@ -562,17 +562,22 @@ function generateNavigationLinks(routeIndices) {
         }).filter(loc => loc !== null);
         
         if (locations.length > 0) {
-            // Build Google Maps URL using coordinates for better accuracy
+            // Build Google Maps URL with place names visible
+            // Using the format that shows address names while using coordinates for accuracy
             let mapsUrl = 'https://www.google.com/maps/dir/';
             
-            // Add each location using lat,lng format
-            locations.forEach((loc, idx) => {
-                // Use coordinates for accuracy: latitude,longitude
-                mapsUrl += `${loc.lat},${loc.lng}/`;
-            });
+            // Add origin
+            const origin = locations[0];
+            mapsUrl += `'${encodeURIComponent(origin.address)}'/@${origin.lat},${origin.lng},17z/`;
+            
+            // Add waypoints and destination
+            for (let i = 1; i < locations.length; i++) {
+                const loc = locations[i];
+                mapsUrl += `'${encodeURIComponent(loc.address)}'/@${loc.lat},${loc.lng},17z/`;
+            }
             
             // Add parameters for driving mode
-            mapsUrl += 'data=!3m1!4b1!4m2!4m1!3e0';
+            mapsUrl += 'data=!4m2!4m1!3e0';
             
             // Log for debugging
             console.log(`Pack ${packIndex + 1} URL:`, mapsUrl);
