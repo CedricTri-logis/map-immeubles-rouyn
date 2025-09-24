@@ -548,36 +548,44 @@ function generateNavigationLinks(routeIndices) {
         packHeader.textContent = `Pack ${packIndex + 1}: Immeubles ${startNum} à ${endNum}`;
         packDiv.appendChild(packHeader);
         
-        // Get coordinates for Google Maps URL
+        // Get coordinates and normalized addresses for Google Maps URL
         const locations = pack.map(index => {
             const building = buildingsData[index];
             if (building && building.coordinates) {
+                // Normalize the address to match Google's format
+                let normalizedAddress = building.originalAddress
+                    .replace(/(\d+)\s*-\s*(\d+)/g, '$1')  // Use first number in range
+                    .replace(/\bO\b/gi, 'Ouest')
+                    .replace(/\bE\b/gi, 'Est')
+                    .replace(/\bMgr\b/gi, 'Monseigneur')
+                    .replace(/\bSte\b/gi, 'Sainte');
+                
+                // Add city and province
+                normalizedAddress = `${normalizedAddress}, Rouyn-Noranda, QC, Canada`;
+                
                 return {
                     lat: building.coordinates.lat.toFixed(6),
                     lng: building.coordinates.lng.toFixed(6),
-                    address: building.originalAddress
+                    address: building.originalAddress,
+                    normalizedAddress: normalizedAddress
                 };
             }
             return null;
         }).filter(loc => loc !== null);
         
         if (locations.length > 0) {
-            // Build Google Maps URL using coordinates for reliability
-            // Google Maps will show the actual address names from its database
+            // Build Google Maps URL using normalized addresses for better display
             let mapsUrl = 'https://www.google.com/maps/dir/';
             
-            // Add origin coordinates
-            const origin = locations[0];
-            mapsUrl += `${origin.lat},${origin.lng}`;
-            
-            // Add waypoints and destination coordinates
-            for (let i = 1; i < locations.length; i++) {
-                const loc = locations[i];
-                mapsUrl += `/${loc.lat},${loc.lng}`;
-            }
+            // Use encoded normalized addresses for each waypoint
+            locations.forEach((loc, idx) => {
+                const encodedAddress = encodeURIComponent(loc.normalizedAddress);
+                if (idx > 0) mapsUrl += '/';
+                mapsUrl += encodedAddress;
+            });
             
             // Add parameters for driving mode
-            mapsUrl += '/data=!3m1!4b1!4m2!4m1!3e0';
+            mapsUrl += '/data=!4m2!4m1!3e0';
             
             // Log for debugging
             console.log(`Pack ${packIndex + 1} URL:`, mapsUrl);
