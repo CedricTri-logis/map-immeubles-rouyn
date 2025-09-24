@@ -491,3 +491,110 @@ body {
     font-size: 0.8rem;
     flex-shrink: 0;
 }
+
+/* Navigation Links Section */
+.navigation-section {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.navigation-section h3 {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.nav-description {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.nav-pack {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-pack h4 {
+    color: #333;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #667eea;
+}
+
+.nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+}
+
+.nav-count {
+    background: rgba(255,255,255,0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.pack-addresses {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pack-addresses li {
+    padding: 0.4rem 0;
+    color: #666;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.pack-addresses li:last-child {
+    border-bottom: none;
+}
+
+/* Mobile optimizations for navigation */
+@media (max-width: 768px) {
+    .navigation-section {
+        margin: 0.5rem 0;
+        padding: 0.8rem;
+    }
+    
+    .nav-button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .nav-icon {
+        font-size: 1.8rem;
+    }
+    
+    .pack-addresses {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+}

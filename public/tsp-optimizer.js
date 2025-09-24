@@ -259,6 +259,9 @@ async function optimizeRoute() {
         document.getElementById('exportRouteBtn').style.display = 'block';
         document.getElementById('clearOptimizedBtn').style.display = 'block';
         
+        // Generate Google Maps navigation links for mobile
+        generateNavigationLinks(optimizedRoute);
+        
         console.log(`✅ Trajet optimisé pour ${totalLocations} adresses!`);
         
     } catch (error) {
@@ -476,6 +479,16 @@ function clearOptimizedRoute() {
     document.getElementById('exportRouteBtn').style.display = 'none';
     document.getElementById('clearOptimizedBtn').style.display = 'none';
     
+    // Hide navigation links
+    const navSection = document.querySelector('.navigation-section');
+    if (navSection) {
+        navSection.style.display = 'none';
+    }
+    const navContainer = document.getElementById('navigationLinks');
+    if (navContainer) {
+        navContainer.innerHTML = '';
+    }
+    
     // Reset list order
     const buildingList = document.getElementById('buildingList');
     const allItems = Array.from(buildingList.querySelectorAll('.building-item'));
@@ -503,6 +516,105 @@ function clearOptimizedRoute() {
     
     document.getElementById('totalDistance').textContent = '-';
     console.log('✅ Trajet effacé');
+}
+
+// Generate Google Maps navigation links for mobile
+function generateNavigationLinks(routeIndices) {
+    const navContainer = document.getElementById('navigationLinks');
+    if (!navContainer) return;
+    
+    // Clear previous links
+    navContainer.innerHTML = '';
+    
+    // Create packs of 10 addresses
+    const packSize = 10;
+    const packs = [];
+    
+    for (let i = 0; i < routeIndices.length; i += packSize) {
+        const packEnd = Math.min(i + packSize, routeIndices.length);
+        const pack = routeIndices.slice(i, packEnd);
+        packs.push(pack);
+    }
+    
+    // Create navigation links for each pack
+    packs.forEach((pack, packIndex) => {
+        const packDiv = document.createElement('div');
+        packDiv.className = 'nav-pack';
+        
+        // Pack header
+        const packHeader = document.createElement('h4');
+        const startNum = packIndex * packSize + 1;
+        const endNum = Math.min(startNum + packSize - 1, routeIndices.length);
+        packHeader.textContent = `Pack ${packIndex + 1}: Immeubles ${startNum} à ${endNum}`;
+        packDiv.appendChild(packHeader);
+        
+        // Create Google Maps URL with waypoints
+        const addresses = pack.map(index => {
+            const building = buildingsData[index];
+            if (building && building.originalAddress) {
+                // Encode address for URL
+                return encodeURIComponent(`${building.originalAddress}, Rouyn-Noranda, QC, Canada`);
+            }
+            return null;
+        }).filter(addr => addr !== null);
+        
+        if (addresses.length > 0) {
+            // Google Maps URL format: origin -> waypoints -> destination
+            let mapsUrl = 'https://www.google.com/maps/dir/';
+            
+            // Add origin (first address)
+            mapsUrl += addresses[0] + '/';
+            
+            // Add waypoints (middle addresses)
+            for (let i = 1; i < addresses.length - 1; i++) {
+                mapsUrl += addresses[i] + '/';
+            }
+            
+            // Add destination (last address if more than 1)
+            if (addresses.length > 1) {
+                mapsUrl += addresses[addresses.length - 1] + '/';
+            }
+            
+            // Add travel mode
+            mapsUrl += 'data=!4m2!4m1!3e0'; // 3e0 = driving mode
+            
+            // Create button
+            const navButton = document.createElement('a');
+            navButton.href = mapsUrl;
+            navButton.target = '_blank';
+            navButton.rel = 'noopener noreferrer';
+            navButton.className = 'nav-button';
+            navButton.innerHTML = `
+                <span class="nav-icon">🗺️</span>
+                <span>Naviguer Pack ${packIndex + 1}</span>
+                <span class="nav-count">${addresses.length} arrêts</span>
+            `;
+            
+            // List of addresses in this pack
+            const addressList = document.createElement('ul');
+            addressList.className = 'pack-addresses';
+            pack.forEach((index, position) => {
+                const building = buildingsData[index];
+                if (building) {
+                    const li = document.createElement('li');
+                    const globalPosition = packIndex * packSize + position + 1;
+                    li.textContent = `${globalPosition}. ${building.originalAddress}`;
+                    addressList.appendChild(li);
+                }
+            });
+            
+            packDiv.appendChild(navButton);
+            packDiv.appendChild(addressList);
+        }
+        
+        navContainer.appendChild(packDiv);
+    });
+    
+    // Show the navigation section
+    const navSection = document.querySelector('.navigation-section');
+    if (navSection) {
+        navSection.style.display = 'block';
+    }
 }
 
 // Export optimized route
